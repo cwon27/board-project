@@ -3,4 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board.board_project.mapper.BoardMapper">
+    <!-- 카테고리값 GET-->
+    <select id="getCategoryData" resultType="board.board_project.dto.CategoryDTO">
+        SELECT comm_cd,
+               comm_cd_nm
+        FROM bt_tb_comm_code;
+    </select>
+
+    <!-- 글 등록-->
+    <insert id="saveBoard" parameterType="board.board_project.vo.BoardVO">
+        INSERT INTO bt_tb_board(
+                category_cd,
+                title,
+                cont,
+                writer_nm,
+                password,
+                view_cnt,
+                reg_dt
+        )
+        VALUES(
+                #{category_cd},
+                #{title},
+                #{cont},
+                #{writer_nm},
+                #{password},
+                0,
+                now()
+        )
+    </insert>
+
 </mapper>
