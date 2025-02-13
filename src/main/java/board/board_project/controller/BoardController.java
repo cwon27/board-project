@@ -17,6 +17,8 @@ public class BoardController {
 
     ModelAndView mav = null;
 
+    //게시물 Create
+
     
     
 }
