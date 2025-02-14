@@ -26,7 +26,12 @@ public class BoardService {
 
     //글 상세 데이터 GET
     public BoardDetailDTO getBoardDetail(int board_no) {
-        return boardMapper.getBoardDetail(board_no);
+        BoardDetailDTO boardDetailData = boardMapper.getBoardDetail(board_no);
+        if (boardDetailData == null) {
+            throw new IllegalArgumentException(board_no + "번 게시글이 존재하지 않습니다.");
+        }
+
+        return boardDetailData;
     }
 
     //글 수정
