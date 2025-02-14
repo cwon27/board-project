@@ -36,14 +36,14 @@
     <select id="getPassword" parameterType="int" resultType="String">
         SELECT password
         FROM bt_tb_board
-        WHERE board_no = #{param1}
+        WHERE board_no = #{board_no}
     </select>
 
     <!-- 글 상세 데이터 GET -->
     <select id="getBoardDetail" parameterType="int" resultType="board.board_project.vo.BoardVO">
         SELECT *
         FROM bt_tb_board
-        WHERE board_no = #{param1}
+        WHERE board_no = #{board_no}
     </select>
 
     <!-- 글 수정 -->
@@ -59,17 +59,22 @@
     <!-- 글 삭제 -->
     <delete id="deleteBoard" parameterType="int">
         DELETE FROM bt_tb_board
-        WHERE board_no = #{param1}
+        WHERE board_no = #{board_no}
     </delete>
 
     <!-- 전체 글 데이터 GET -->
     <select id="getBoardList" resultType="board.board_project.vo.BoardVO">
-        SELECT board_no, category_cd, title, writer_nm, view_cnt, reg_dt
+        SELECT board_no,
+               category_cd,
+               title,
+               writer_nm,
+               view_cnt,
+               DATE_FORMAT(reg_dt, '%Y-%m-%d') AS reg_dt
         FROM bt_tb_board
         <where>
             <!-- 카테고리 타입별 list -> 전체면 굳이 줄 필요 없음-->
             <if test="searchCategoryType != null and searchCategoryType != '' and searchCategoryType != 'ALL'">
-                AND category_cd = #{searchCategoryType}
+                category_cd = #{searchCategoryType}
             </if>
 
             <!-- 검색 타입별 list-->
@@ -131,6 +136,6 @@
     <update id="viewCount" parameterType="int">
         UPDATE bt_tb_board
         SET view_cnt = view_cnt + 1
-        WHERE board_no = #{param1}
+        WHERE board_no = #{board_no}
     </update>
 </mapper>
