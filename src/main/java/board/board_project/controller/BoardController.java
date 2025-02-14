@@ -1,6 +1,8 @@
 package board.board_project.controller;
 
+import board.board_project.dto.BoardListDTO;
 import board.board_project.dto.CategoryDTO;
+import board.board_project.dto.SaveBoardDTO;
 import board.board_project.dto.UpdateBoardDTO;
 import board.board_project.service.BoardService;
 import board.board_project.vo.BoardVO;
@@ -38,8 +40,8 @@ public class BoardController {
 
     //글 등록(Create) api
     @PostMapping("/saveBoard")
-    public ResponseEntity<Map<String, String>> saveBoard(@RequestBody BoardVO boardVO){
-        int result = boardService.saveBoard(boardVO);
+    public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO){
+        int result = boardService.saveBoard(saveBoardDTO);
 
         Map<String, String> response = new HashMap<>();
         if(result>0){
@@ -114,7 +116,7 @@ public class BoardController {
                                                             @RequestParam("sortType") String sortType,
                                                             @RequestParam(value = "page", defaultValue = "1") int page,
                                                             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
-        List<BoardVO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
+        List<BoardListDTO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
         //총 데이터 갯수
         int totalListAmount = boardService.getTotalListAmount();
 

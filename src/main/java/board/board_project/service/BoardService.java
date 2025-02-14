@@ -1,6 +1,8 @@
 package board.board_project.service;
 
+import board.board_project.dto.BoardListDTO;
 import board.board_project.dto.CategoryDTO;
+import board.board_project.dto.SaveBoardDTO;
 import board.board_project.dto.UpdateBoardDTO;
 import board.board_project.mapper.BoardMapper;
 import board.board_project.vo.BoardVO;
@@ -22,8 +24,8 @@ public class BoardService {
     }
 
     //글 등록
-    public int saveBoard(BoardVO boardVO){
-        return boardMapper.saveBoard(boardVO);
+    public int saveBoard(SaveBoardDTO saveBoardDTO){
+        return boardMapper.saveBoard(saveBoardDTO);
     }
 
     //비밀번호 값 GET
@@ -47,12 +49,12 @@ public class BoardService {
     }
 
     //전체 글 데이터 GET
-    public List<BoardVO> getBoardList(String searchCategoryType,
-                                      String searchType,
-                                      String searchKeyword,
-                                      String sortType,
-                                      int page,
-                                      int pageSize){
+    public List<BoardListDTO> getBoardList(String searchCategoryType,
+                                           String searchType,
+                                           String searchKeyword,
+                                           String sortType,
+                                           int page,
+                                           int pageSize){
         int offset = (page-1)*pageSize;
         return boardMapper.getBoardList(searchCategoryType,searchType,searchKeyword,sortType,pageSize,offset);
     }

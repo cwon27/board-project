@@ -1,6 +1,8 @@
 package board.board_project.mapper;
 
+import board.board_project.dto.BoardListDTO;
 import board.board_project.dto.CategoryDTO;
+import board.board_project.dto.SaveBoardDTO;
 import board.board_project.dto.UpdateBoardDTO;
 import board.board_project.vo.BoardVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,7 +18,7 @@ public interface BoardMapper {
     List<CategoryDTO> getCategoryData();
 
     //글 등록
-    int saveBoard(BoardVO boardVO);
+    int saveBoard(SaveBoardDTO saveBoardDTO);
 
     //비밀번호 값 GET
     String getPassword(int board_no);
@@ -31,12 +33,12 @@ public interface BoardMapper {
     int deleteBoard(int board_no);
 
     //전체 글 데이터 GET
-    List<BoardVO> getBoardList(String searchCategoryType,
-                               String searchType,
-                               String searchKeyword,
-                               String sortType,
-                               int pageSize,
-                               int offset);
+    List<BoardListDTO> getBoardList(String searchCategoryType,
+                                    String searchType,
+                                    String searchKeyword,
+                                    String sortType,
+                                    int pageSize,
+                                    int offset);
 
     //총 데이터 갯수 GET
     int getTotalListAmount();

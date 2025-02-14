@@ -11,7 +11,7 @@
     </select>
 
     <!-- 글 등록 -->
-    <insert id="saveBoard" parameterType="board.board_project.vo.BoardVO">
+    <insert id="saveBoard" parameterType="board.board_project.dto.SaveBoardDTO">
         INSERT INTO bt_tb_board(
                 category_cd,
                 title,
@@ -63,7 +63,7 @@
     </delete>
 
     <!-- 전체 글 데이터 GET -->
-    <select id="getBoardList" resultType="board.board_project.vo.BoardVO">
+    <select id="getBoardList" resultType="board.board_project.dto.BoardListDTO">
         SELECT board_no,
                category_cd,
                title,
