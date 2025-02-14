@@ -39,8 +39,6 @@ function App() {
       });
   }, []); 
 
-  console.log(boardList);
-  console.log(totalListAmount);
 
   // Set this dynamically as needed
    return (
