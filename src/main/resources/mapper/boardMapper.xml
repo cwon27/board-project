@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board.board_project.mapper.BoardMapper">
-    <!-- 카테고리값 GET-->
+    <!-- 카테고리값 GET -->
     <select id="getCategoryData" resultType="board.board_project.dto.CategoryDTO">
         SELECT comm_cd,
                comm_cd_nm
         FROM bt_tb_comm_code;
     </select>
 
-    <!-- 글 등록-->
+    <!-- 글 등록 -->
     <insert id="saveBoard" parameterType="board.board_project.vo.BoardVO">
         INSERT INTO bt_tb_board(
                 category_cd,
@@ -31,5 +31,28 @@
                 now()
         )
     </insert>
+
+    <!-- 비밀번호 값 GET -->
+    <select id="getPassword" parameterType="int" resultType="String">
+        SELECT password
+        FROM bt_tb_board
+        WHERE board_no = #{param1}
+    </select>
+
+    <!-- 글 수정폼 데이터 GET -->
+    <select id="getBoardDetail" parameterType="int" resultType="board.board_project.vo.BoardVO">
+        SELECT *
+        FROM bt_tb_board
+        WHERE board_no = #{param1}
+    </select>
+
+    <!-- 글 수정 -->
+    <update id="updateBoard" parameterType="board.board_project.dto.UpdateBoardDTO">
+        UPDATE bt_tb_board
+        SET category_cd = #{category_cd},
+            title = #{title},
+            cont = #{cont}
+        WHERE board_no = #{board_no}
+    </update>
 
 </mapper>
