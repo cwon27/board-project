@@ -26,4 +26,7 @@ public interface BoardMapper {
 
     //글 수정
     int updateBoard(UpdateBoardDTO updateBoardDTO);
+
+    //글 삭제
+    int deleteBoard(int board_no);
 }

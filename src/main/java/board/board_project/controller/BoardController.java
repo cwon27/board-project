@@ -71,7 +71,7 @@ public class BoardController {
     }
 
     //글 수정(Update) api
-    @PostMapping("/updateBoard")
+    @PutMapping("/updateBoard")
     public ResponseEntity<Map<String, String>> updateBoard(@RequestBody UpdateBoardDTO updateBoardDTO){
         int result = boardService.updateBoard(updateBoardDTO);
 
@@ -80,7 +80,7 @@ public class BoardController {
             //수정 성공
             response.put("message", "게시글 수정 성공");
             //상세페이지로 이동
-            response.put("redirectUrl", "http://localhost:5173/board?board_no="+updateBoardDTO.getBoard_no());
+            response.put("redirectUrl", "http://localhost:5173/boardDetail?board_no="+updateBoardDTO.getBoard_no());
         }else{
             response.put("message", "게시글 수정 실패");
         }
@@ -88,7 +88,24 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
-    //글 삭제
+    //글 삭제(Delete) api
+    @DeleteMapping("/deleteBoard")
+    public ResponseEntity<Map<String, String>> deleteBoard(@RequestParam("board_no") int board_no){
+        int result = boardService.deleteBoard(board_no);
+
+        Map<String, String> response = new HashMap<>();
+        if(result>0){
+            //삭제 성공
+            response.put("message", "게시글 삭제 성공");
+            //목록페이지로 이동
+            response.put("redirectUrl", "http://localhost:5173/board");
+        }else{
+            response.put("message", "게시글 삭제 실패");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 

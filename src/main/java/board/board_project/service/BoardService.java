@@ -40,4 +40,9 @@ public class BoardService {
     public int updateBoard(UpdateBoardDTO updateBoardDTO){
         return boardMapper.updateBoard(updateBoardDTO);
     }
+    
+    //글 삭제
+    public int deleteBoard(int board_no){
+        return boardMapper.deleteBoard(board_no);
+    }
 }
