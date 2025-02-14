@@ -1,11 +1,7 @@
 package board.board_project.service;
 
-import board.board_project.dto.BoardListDTO;
-import board.board_project.dto.CategoryDTO;
-import board.board_project.dto.SaveBoardDTO;
-import board.board_project.dto.UpdateBoardDTO;
+import board.board_project.dto.*;
 import board.board_project.mapper.BoardMapper;
-import board.board_project.vo.BoardVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,32 +15,27 @@ public class BoardService {
     }
 
     //카테고리 값 GET
-    public List<CategoryDTO> getCategoryData(){
+    public List<CategoryDTO> getCategoryData() {
         return boardMapper.getCategoryData();
     }
 
     //글 등록
-    public int saveBoard(SaveBoardDTO saveBoardDTO){
+    public int saveBoard(SaveBoardDTO saveBoardDTO) {
         return boardMapper.saveBoard(saveBoardDTO);
     }
 
-    //비밀번호 값 GET
-    public String getPassword(int board_no){
-        return boardMapper.getPassword(board_no);
-    }
-
     //글 상세 데이터 GET
-    public BoardVO getBoardDetail(int board_no){
+    public BoardDetailDTO getBoardDetail(int board_no) {
         return boardMapper.getBoardDetail(board_no);
     }
 
     //글 수정
-    public int updateBoard(UpdateBoardDTO updateBoardDTO){
+    public int updateBoard(UpdateBoardDTO updateBoardDTO) {
         return boardMapper.updateBoard(updateBoardDTO);
     }
-    
+
     //글 삭제
-    public int deleteBoard(int board_no){
+    public int deleteBoard(int board_no) {
         return boardMapper.deleteBoard(board_no);
     }
 
@@ -54,18 +45,18 @@ public class BoardService {
                                            String searchKeyword,
                                            String sortType,
                                            int page,
-                                           int pageSize){
-        int offset = (page-1)*pageSize;
-        return boardMapper.getBoardList(searchCategoryType,searchType,searchKeyword,sortType,pageSize,offset);
+                                           int pageSize) {
+        int offset = (page - 1) * pageSize;
+        return boardMapper.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, pageSize, offset);
     }
 
     //총 데이터 갯수 GET
-    public int getTotalListAmount(){
+    public int getTotalListAmount() {
         return boardMapper.getTotalListAmount();
     }
 
     //조회수
-    public void viewCount(int board_no){
+    public void viewCount(int board_no) {
         boardMapper.viewCount(board_no);
     }
 }

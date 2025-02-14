@@ -32,16 +32,15 @@
         )
     </insert>
 
-    <!-- 비밀번호 값 GET -->
-    <select id="getPassword" parameterType="int" resultType="String">
-        SELECT password
-        FROM bt_tb_board
-        WHERE board_no = #{board_no}
-    </select>
-
     <!-- 글 상세 데이터 GET -->
-    <select id="getBoardDetail" parameterType="int" resultType="board.board_project.vo.BoardVO">
-        SELECT *
+    <select id="getBoardDetail" parameterType="int" resultType="board.board_project.dto.BoardDetailDTO">
+        SELECT board_no,
+               category_cd,
+               title,
+               cont,
+               writer_nm,
+               password,
+               reg_dt
         FROM bt_tb_board
         WHERE board_no = #{board_no}
     </select>
