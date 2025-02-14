@@ -92,8 +92,8 @@ public class BoardController {
                                                             @RequestParam("searchType") String searchType,
                                                             @RequestParam("searchKeyword") String searchKeyword,
                                                             @RequestParam("sortType") String sortType,
-                                                            @RequestParam(value = "page", defaultValue = "1") int page,
-                                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+                                                            @RequestParam(value = "page") int page,
+                                                            @RequestParam(value = "pageSize") int pageSize) {
         List<BoardListDTO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
         //총 데이터 갯수
         int totalListAmount = boardService.getTotalListAmount();
