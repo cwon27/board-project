@@ -62,7 +62,7 @@ public class BoardController {
         return passwordData;
     }
 
-    //글 수정폼 데이터 뿌려주는 api -> react에 데이터를 전달해서 그걸 화면에 뿌려줄거임
+    //글 상세 Read api -> react에 데이터를 전달해서 그걸 화면에 뿌려줄거임(수정시에도 사용)
     @GetMapping("/getBoarDetail")
     public ResponseEntity<BoardVO> getBoarDetail(@RequestParam("board_no") int board_no){
         BoardVO boardDetailData = boardService.getBoardDetail(board_no);
@@ -106,7 +106,28 @@ public class BoardController {
         return ResponseEntity.ok(response);
     }
 
+    //전체 리스트 Read api
+    @GetMapping("/getBoardList")
+    public ResponseEntity<Map<String, Object>> getBoardList(@RequestParam("searchCategoryType") String searchCategoryType,
+                                                            @RequestParam("searchType") String searchType,
+                                                            @RequestParam("searchKeyword") String searchKeyword,
+                                                            @RequestParam("sortType") String sortType,
+                                                            @RequestParam(value = "page", defaultValue = "1") int page,
+                                                            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+        List<BoardVO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
+        //총 데이터 갯수
+        int totalListAmount = boardService.getTotalListAmount();
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("boardList", boardList);
+        response.put("totalListAmount", totalListAmount);
 
+        return ResponseEntity.ok(response);
+    }
 
+    //조회수 처리 api
+    @GetMapping("/viewCount")
+    public void viewCount(@RequestParam("board_no") int board_no){
+        boardService.viewCount(board_no);
+    }
 }

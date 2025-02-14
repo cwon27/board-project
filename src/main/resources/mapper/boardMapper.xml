@@ -39,7 +39,7 @@
         WHERE board_no = #{param1}
     </select>
 
-    <!-- 글 수정폼 데이터 GET -->
+    <!-- 글 상세 데이터 GET -->
     <select id="getBoardDetail" parameterType="int" resultType="board.board_project.vo.BoardVO">
         SELECT *
         FROM bt_tb_board
@@ -61,4 +61,76 @@
         DELETE FROM bt_tb_board
         WHERE board_no = #{param1}
     </delete>
+
+    <!-- 전체 글 데이터 GET -->
+    <select id="getBoardList" resultType="board.board_project.vo.BoardVO">
+        SELECT board_no, category_cd, title, writer_nm, view_cnt, reg_dt
+        FROM bt_tb_board
+        <where>
+            <!-- 카테고리 타입별 list -> 전체면 굳이 줄 필요 없음-->
+            <if test="searchCategoryType != null and searchCategoryType != '' and searchCategoryType != 'ALL'">
+                AND category_cd = #{searchCategoryType}
+            </if>
+
+            <!-- 검색 타입별 list-->
+            <if test="searchType != null and searchType != '' and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'all'">
+                        <!-- 전체(제목, 내용, 작성자명) list-->
+                        AND (
+                            title LIKE CONCAT('%', #{searchKeyword}, '%')
+                            OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
+                            OR writer_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+                        )
+                    </when>
+                    <when test="searchType == 'title'">
+                        <!-- 제목 list-->
+                        AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'cont'">
+                        <!-- 내용 list-->
+                        AND cont LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'titleCont'">
+                        <!-- 제목+내용 list-->
+                        AND (
+                            title LIKE CONCAT('%', #{searchKeyword}, '%')
+                            OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
+                        )
+                    </when>
+                    <when test="searchType == 'writer'">
+                        <!-- 작성자명 list-->
+                        AND writer_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY
+        <!-- 정렬 타입별 list-->
+        <choose>
+            <when test="sortType == 'latest'">
+                board_no DESC
+            </when>
+            <when test="sortType == 'hit'">
+                view_cnt DESC
+            </when>
+            <otherwise>
+                board_no DESC
+            </otherwise>
+        </choose>
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+
+    <!-- 총 데이터 갯수 GET -->
+    <select id="getTotalListAmount" resultType="int">
+        SELECT COUNT(board_no)
+        FROM bt_tb_board
+    </select>
+
+    <!-- 조회수 -->
+    <update id="viewCount" parameterType="int">
+        UPDATE bt_tb_board
+        SET view_cnt = view_cnt + 1
+        WHERE board_no = #{param1}
+    </update>
 </mapper>

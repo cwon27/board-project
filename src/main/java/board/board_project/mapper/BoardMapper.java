@@ -21,7 +21,7 @@ public interface BoardMapper {
     //비밀번호 값 GET
     String getPassword(int board_no);
 
-    //글 수정폼 데이터 GET
+    //글 상세 데이터 GET
     BoardVO getBoardDetail(int board_no);
 
     //글 수정
@@ -29,4 +29,18 @@ public interface BoardMapper {
 
     //글 삭제
     int deleteBoard(int board_no);
+
+    //전체 글 데이터 GET
+    List<BoardVO> getBoardList(String searchCategoryType,
+                               String searchType,
+                               String searchKeyword,
+                               String sortType,
+                               int pageSize,
+                               int offset);
+
+    //총 데이터 갯수 GET
+    int getTotalListAmount();
+
+    //조회수
+    void viewCount(int board_no);
 }
