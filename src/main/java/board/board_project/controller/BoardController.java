@@ -38,6 +38,9 @@ public class BoardController {
     //글 등록(Create) api
     @PostMapping("/saveBoard")
     public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO) {
+        //받아온 데이터 한번 더 유효성 검사
+        boardService.checkData(saveBoardDTO);
+
         //비번 암호화
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
 //        System.out.println("pw : " + saveBoardDTO.getPassword());

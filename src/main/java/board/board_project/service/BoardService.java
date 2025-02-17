@@ -19,6 +19,49 @@ public class BoardService {
         return boardMapper.getCategoryData();
     }
 
+    //글 등록시 유효성 검사
+    public void checkData(SaveBoardDTO saveBoardDTO) {
+        //1. 카테고리
+        if (saveBoardDTO.getCategory_cd() == null || saveBoardDTO.getCategory_cd().trim().isEmpty() ||
+                (!saveBoardDTO.getCategory_cd().equals("CTG001") &&
+                        !saveBoardDTO.getCategory_cd().equals("CTG002") &&
+                        !saveBoardDTO.getCategory_cd().equals("CTG003"))) {
+            throw new IllegalArgumentException("카테고리 값이 유효하지 않습니다.");
+        }
+
+        //2. 제목
+        if (saveBoardDTO.getTitle() == null || saveBoardDTO.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("제목 값이 없습니다.");
+        }
+
+        if (saveBoardDTO.getTitle().length() > 200) {
+            throw new IllegalArgumentException("제목은 200자를 넘을 수 없습니다.");
+        }
+
+        //3. 내용
+        if (saveBoardDTO.getCont() == null || saveBoardDTO.getCont().trim().isEmpty()) {
+            throw new IllegalArgumentException("내용 값이 없습니다.");
+        }
+
+        //4. 작성자명
+        if (saveBoardDTO.getWriter_nm() == null || saveBoardDTO.getWriter_nm().trim().isEmpty()) {
+            throw new IllegalArgumentException("작성자 값이 없습니다.");
+        }
+
+        if (saveBoardDTO.getWriter_nm().length() > 50) {
+            throw new IllegalArgumentException("작성자명은 50자를 넘을 수 없습니다.");
+        }
+
+        //5. 비밀번호
+        if (saveBoardDTO.getPassword() == null || saveBoardDTO.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호 값이 없습니다.");
+        }
+
+        if (saveBoardDTO.getPassword().length() > 100) {
+            throw new IllegalArgumentException("비밀번호는 100자를 넘을 수 없습니다.");
+        }
+    }
+
     //글 등록
     public int saveBoard(SaveBoardDTO saveBoardDTO) {
         return boardMapper.saveBoard(saveBoardDTO);
