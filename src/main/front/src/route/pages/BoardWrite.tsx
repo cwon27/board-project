@@ -1,7 +1,8 @@
-function BoardWrite() {
-  return <div>BoardWrite</div>;
+export const BoardWrite = () => {
+  return (
+      <>
+      </>
+  );
 }
-
-export default BoardWrite;
 
 

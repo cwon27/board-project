@@ -1,7 +1,8 @@
-function BoardUpdate() {
-  return <div>BoardUpdate</div>;
+export const BoardUpdate = () => {
+  return (
+      <>
+      </>
+  );
 }
-
-export default BoardUpdate;
 
 

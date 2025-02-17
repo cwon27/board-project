@@ -1,6 +1,7 @@
-function BoardDetail() {
-  return <div>BoardDetail</div>;
+export const BoardDetail = () => {
+  return (
+      <>
+      </>
+  );
 }
-
-export default BoardDetail;
 
