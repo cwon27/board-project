@@ -40,7 +40,7 @@ public class BoardController {
     public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO) {
         //비번 암호화
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
-        System.out.println("pw : " + saveBoardDTO.getPassword());
+//        System.out.println("pw : " + saveBoardDTO.getPassword());
 
         int result = boardService.saveBoard(saveBoardDTO);
 
