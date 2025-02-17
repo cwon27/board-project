@@ -2,8 +2,9 @@ package board.board_project.controller;
 
 import board.board_project.dto.*;
 import board.board_project.service.BoardService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -14,9 +15,11 @@ import java.util.Map;
 @RequestMapping("/api/board")
 public class BoardController {
     private final BoardService boardService;
+    private final BCryptPasswordEncoder encoder;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, BCryptPasswordEncoder encoder) {
         this.boardService = boardService;
+        this.encoder = encoder;
     }
 
     //카테고리 값 뿌려주는 api
@@ -35,6 +38,10 @@ public class BoardController {
     //글 등록(Create) api
     @PostMapping("/saveBoard")
     public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO) {
+        //비번 암호화
+        saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
+        System.out.println("pw : " + saveBoardDTO.getPassword());
+
         int result = boardService.saveBoard(saveBoardDTO);
 
         Map<String, String> response = new HashMap<>();
@@ -42,9 +49,29 @@ public class BoardController {
             //저장 성공
             response.put("message", "게시글 등록 성공");
             //window.location.href = response.redirectUrl으로 사용할 거임
-            response.put("redirectUrl", "http://localhost:5173/board");
+            response.put("redirectUrl", "http://localhost:5173");
         } else {
             response.put("message", "게시글 등록 실패");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    //비밀번호 확인 api
+    @GetMapping("/checkPassword")
+    public ResponseEntity<Map<String, Object>> checkPassword(@RequestBody CheckPwDTO checkPwDTO) {
+        //암호화된 비번 가져오기
+        String encodePw = boardService.getBoardPw(checkPwDTO.getBoard_no());
+
+        Map<String, Object> response = new HashMap<>();
+
+        //비번 비교
+        if (encodePw != null && encoder.matches(checkPwDTO.getPassword(), encodePw)) {
+            response.put("success", true);
+            response.put("message", "비밀번호 일치");
+        } else {
+            response.put("success", false);
+            response.put("message", "비밀번호 불일치");
         }
 
         return ResponseEntity.ok(response);
@@ -60,7 +87,7 @@ public class BoardController {
             //수정 성공
             response.put("message", "게시글 수정 성공");
             //상세페이지로 이동
-            response.put("redirectUrl", "http://localhost:5173/board/detail?board_no=" + updateBoardDTO.getBoard_no());
+            response.put("redirectUrl", "http://localhost:5173/boardDetail/" + updateBoardDTO.getBoard_no());
         } else {
             response.put("message", "게시글 수정 실패");
         }
@@ -78,7 +105,7 @@ public class BoardController {
             //삭제 성공
             response.put("message", "게시글 삭제 성공");
             //목록페이지로 이동
-            response.put("redirectUrl", "http://localhost:5173/board");
+            response.put("redirectUrl", "http://localhost:5173");
         } else {
             response.put("message", "게시글 삭제 실패");
         }
@@ -95,8 +122,8 @@ public class BoardController {
                                                             @RequestParam("page") int page,
                                                             @RequestParam("pageSize") int pageSize) {
         List<BoardListDTO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
-        //총 데이터 갯수
-        int totalListAmount = boardService.getTotalListAmount();
+        //총 데이터 갯수(검색조건 포함)
+        int totalListAmount = boardService.getTotalListAmount(searchCategoryType, searchType, searchKeyword);
 
         Map<String, Object> response = new HashMap<>();
         response.put("boardList", boardList);

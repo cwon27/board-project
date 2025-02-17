@@ -1,5 +1,4 @@
 import { RecoilRoot, useRecoilState } from "recoil";
-import "./App.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { boardListState, totalListAmountState } from "./store/text.atom";

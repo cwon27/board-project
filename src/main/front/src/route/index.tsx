@@ -1,34 +1,25 @@
 import App from "../App";
-import About from "../components/About";
-import TutorialReducer from "../components/TutorialReducer";
-import Chaewon from "../pages/Chaewon";
+import BoardDetail from "./pages/BoardDetail";
+import BoardWrite from "./pages/BoardWrite";
+import BoardUpdate from "./pages/BoardUpdate";
 
 const routes = [
   {
+    // 게시판 글 전체
     path: "/",
     element: <App />,
   },
   {
-    path: "/about",
-    element: <About />,
-    children: [
-      {
-        path: "/about/me",
-        element: <h3>Me</h3>,
-      },
-      {
-        path: "/about/you",
-        element: <h3>You</h3>,
-      },
-    ],
+    path: "/boardDetail/:id",
+    element: <BoardDetail />,
   },
   {
-    path: "/tutorial",
-    element: <TutorialReducer />,
+    path: "/boardWrite",
+    element: <BoardWrite />,
   },
   {
-    path: "/todo",
-    element: <Chaewon />,
+    path: "/boardUpdate/:id",
+    element: <BoardUpdate />,
   },
 ];
 

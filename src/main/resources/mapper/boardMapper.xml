@@ -45,6 +45,13 @@
         WHERE board_no = #{board_no}
     </select>
 
+    <!-- 비밀번호 가져오기 -->
+    <select id="getBoardPw" resultType="String">
+        SELECT password
+        FROM bt_tb_board
+        WHERE board_no = #{board_no}
+    </select>
+
     <!-- 글 수정 -->
     <update id="updateBoard" parameterType="board.board_project.dto.UpdateBoardDTO">
         UPDATE bt_tb_board
@@ -61,15 +68,8 @@
         WHERE board_no = #{board_no}
     </delete>
 
-    <!-- 전체 글 데이터 GET -->
-    <select id="getBoardList" resultType="board.board_project.dto.BoardListDTO">
-        SELECT board_no,
-               category_cd,
-               title,
-               writer_nm,
-               view_cnt,
-               DATE_FORMAT(reg_dt, '%Y-%m-%d') AS reg_dt
-        FROM bt_tb_board
+    <!-- 검색 조건 재사용 위한 sql -->
+    <sql id="searchBoardList">
         <where>
             <!-- 카테고리 타입별 list -> 전체면 굳이 줄 필요 없음-->
             <if test="searchCategoryType != null and searchCategoryType != '' and searchCategoryType != 'ALL'">
@@ -82,9 +82,9 @@
                     <when test="searchType == 'all'">
                         <!-- 전체(제목, 내용, 작성자명) list-->
                         AND (
-                            title LIKE CONCAT('%', #{searchKeyword}, '%')
-                            OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
-                            OR writer_nm LIKE CONCAT('%', #{searchKeyword}, '%')
+                        title LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR writer_nm LIKE CONCAT('%', #{searchKeyword}, '%')
                         )
                     </when>
                     <when test="searchType == 'title'">
@@ -98,8 +98,8 @@
                     <when test="searchType == 'titleCont'">
                         <!-- 제목+내용 list-->
                         AND (
-                            title LIKE CONCAT('%', #{searchKeyword}, '%')
-                            OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
+                        title LIKE CONCAT('%', #{searchKeyword}, '%')
+                        OR cont LIKE CONCAT('%', #{searchKeyword}, '%')
                         )
                     </when>
                     <when test="searchType == 'writer'">
@@ -109,6 +109,18 @@
                 </choose>
             </if>
         </where>
+    </sql>
+
+    <!-- 전체 글 데이터 GET -->
+    <select id="getBoardList" resultType="board.board_project.dto.BoardListDTO">
+        SELECT board_no,
+               category_cd,
+               title,
+               writer_nm,
+               view_cnt,
+               DATE_FORMAT(reg_dt, '%Y-%m-%d') AS reg_dt
+        FROM bt_tb_board
+        <include refid="searchBoardList"/>
         ORDER BY
         <!-- 정렬 타입별 list-->
         <choose>
@@ -129,6 +141,7 @@
     <select id="getTotalListAmount" resultType="int">
         SELECT COUNT(board_no)
         FROM bt_tb_board
+        <include refid="searchBoardList"/>
     </select>
 
     <!-- 조회수 -->

@@ -19,6 +19,9 @@ public interface BoardMapper {
     //글 상세 데이터 GET
     BoardDetailDTO getBoardDetail(int board_no);
 
+    //비밀번호 가져오기
+    String getBoardPw(int board_no);
+
     //글 수정
     int updateBoard(UpdateBoardDTO updateBoardDTO);
 
@@ -34,7 +37,9 @@ public interface BoardMapper {
                                     int offset);
 
     //총 데이터 갯수 GET
-    int getTotalListAmount();
+    int getTotalListAmount(String searchCategoryType,
+                           String searchType,
+                           String searchKeyword);
 
     //조회수
     void viewCount(int board_no);

@@ -13,6 +13,5 @@ public class BoardDetailDTO {
     private String title; //제목
     private String cont; //내용
     private String writer_nm; //작성자명
-    private String password; //비밀번호
     private String reg_dt; //작성일
 }

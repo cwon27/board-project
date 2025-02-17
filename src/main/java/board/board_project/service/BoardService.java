@@ -34,6 +34,11 @@ public class BoardService {
         return boardDetailData;
     }
 
+    //비밀번호 가져오기
+    public String getBoardPw(int board_no) {
+        return boardMapper.getBoardPw(board_no);
+    }
+
     //글 수정
     public int updateBoard(UpdateBoardDTO updateBoardDTO) {
         return boardMapper.updateBoard(updateBoardDTO);
@@ -56,8 +61,10 @@ public class BoardService {
     }
 
     //총 데이터 갯수 GET
-    public int getTotalListAmount() {
-        return boardMapper.getTotalListAmount();
+    public int getTotalListAmount(String searchCategoryType,
+                                  String searchType,
+                                  String searchKeyword) {
+        return boardMapper.getTotalListAmount(searchCategoryType, searchType, searchKeyword);
     }
 
     //조회수
