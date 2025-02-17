@@ -1,4 +1,4 @@
-package board.board_project.dto;
+package board.board_project.dto.response.board;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

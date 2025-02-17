@@ -1,12 +1,18 @@
-package board.board_project.controller;
+package board.board_project.controller.board;
 
-import board.board_project.dto.*;
-import board.board_project.service.BoardService;
+import board.board_project.dto.request.board.CheckPwDTO;
+import board.board_project.dto.request.board.SaveBoardDTO;
+import board.board_project.dto.request.board.SearchBoardDTO;
+import board.board_project.dto.request.board.UpdateBoardDTO;
+import board.board_project.dto.response.board.BoardDetailDTO;
+import board.board_project.dto.response.board.BoardListDTO;
+import board.board_project.dto.response.common.CategoryDTO;
+import board.board_project.service.board.BoardService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,28 +28,14 @@ public class BoardController {
         this.encoder = encoder;
     }
 
-    //카테고리 값 뿌려주는 api
-    @GetMapping("/getCategoryData")
-    public ResponseEntity<Map<String, Object>> getCategoryData() {
-        //공통코드 : 공통코드명
-        //공통코드 테이블에서 데이터 가져오기
-        List<CategoryDTO> categoryData = boardService.getCategoryData();
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("categoryData", categoryData);
-
-        return ResponseEntity.ok(response);
-    }
-
     //글 등록(Create) api
-    @PostMapping("/saveBoard")
+    @PostMapping("/save")
     public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO) {
         //받아온 데이터 한번 더 유효성 검사
         boardService.checkData(saveBoardDTO);
 
         //비번 암호화
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
-//        System.out.println("pw : " + saveBoardDTO.getPassword());
 
         int result = boardService.saveBoard(saveBoardDTO);
 
@@ -51,7 +43,7 @@ public class BoardController {
         if (result > 0) {
             //저장 성공
             response.put("message", "게시글 등록 성공");
-            //window.location.href = response.redirectUrl으로 사용할 거임
+            //window.location.href = response.redirectUrl으로 사용할 거임 -> front에서 처리
             response.put("redirectUrl", "http://localhost:5173");
         } else {
             response.put("message", "게시글 등록 실패");
@@ -81,7 +73,7 @@ public class BoardController {
     }
 
     //글 수정(Update) api
-    @PutMapping("/updateBoard")
+    @PutMapping("/update")
     public ResponseEntity<Map<String, String>> updateBoard(@RequestBody UpdateBoardDTO updateBoardDTO) {
         int result = boardService.updateBoard(updateBoardDTO);
 
@@ -99,8 +91,8 @@ public class BoardController {
     }
 
     //글 삭제(Delete) api
-    @DeleteMapping("/deleteBoard")
-    public ResponseEntity<Map<String, String>> deleteBoard(@RequestParam("board_no") int board_no) {
+    @DeleteMapping("/delete/{board_no}")
+    public ResponseEntity<Map<String, String>> deleteBoard(@PathVariable("board_no") int board_no) {
         int result = boardService.deleteBoard(board_no);
 
         Map<String, String> response = new HashMap<>();
@@ -117,16 +109,15 @@ public class BoardController {
     }
 
     //전체 리스트 Read api
-    @GetMapping("/getBoardList")
-    public ResponseEntity<Map<String, Object>> getBoardList(@RequestParam("searchCategoryType") String searchCategoryType,
-                                                            @RequestParam("searchType") String searchType,
-                                                            @RequestParam("searchKeyword") String searchKeyword,
-                                                            @RequestParam("sortType") String sortType,
-                                                            @RequestParam("page") int page,
-                                                            @RequestParam("pageSize") int pageSize) {
-        List<BoardListDTO> boardList = boardService.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, page, pageSize);
+    @GetMapping("/list")
+    public ResponseEntity<Map<String, Object>> getBoardList(@RequestBody SearchBoardDTO searchBoardDTO) {
         //총 데이터 갯수(검색조건 포함)
-        int totalListAmount = boardService.getTotalListAmount(searchCategoryType, searchType, searchKeyword);
+        int totalListAmount = boardService.getTotalListAmount(searchBoardDTO);
+
+        List<BoardListDTO> boardList = (totalListAmount > 0)
+                ? boardService.getBoardList(searchBoardDTO)
+                : Collections.emptyList();
+
 
         Map<String, Object> response = new HashMap<>();
         response.put("boardList", boardList);
@@ -136,16 +127,16 @@ public class BoardController {
     }
 
     //글 상세 Read api -> react에 데이터를 전달해서 그걸 화면에 뿌려줄거임(수정시에도 사용)
-    @GetMapping("/getBoarDetail")
-    public ResponseEntity<BoardDetailDTO> getBoarDetail(@RequestParam("board_no") int board_no) {
+    @GetMapping("/listDetail/{board_no}")
+    public ResponseEntity<BoardDetailDTO> getBoarDetail(@PathVariable("board_no") int board_no) {
         BoardDetailDTO boardDetailData = boardService.getBoardDetail(board_no);
 
         return ResponseEntity.ok(boardDetailData);
     }
 
     //조회수 처리 api
-    @GetMapping("/viewCount")
-    public void viewCount(@RequestParam("board_no") int board_no) {
+    @GetMapping("/viewCount/{board_no}")
+    public void viewCount(@PathVariable("board_no") int board_no) {
         boardService.viewCount(board_no);
     }
 }

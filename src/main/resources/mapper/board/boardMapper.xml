@@ -2,16 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="board.board_project.mapper.BoardMapper">
-    <!-- 카테고리값 GET -->
-    <select id="getCategoryData" resultType="board.board_project.dto.CategoryDTO">
-        SELECT comm_cd,
-               comm_cd_nm
-        FROM bt_tb_comm_code;
-    </select>
+<mapper namespace="board.board_project.mapper.board.BoardMapper">
 
     <!-- 글 등록 -->
-    <insert id="saveBoard" parameterType="board.board_project.dto.SaveBoardDTO">
+    <insert id="saveBoard" parameterType="board.board_project.dto.request.board.SaveBoardDTO">
         INSERT INTO bt_tb_board(
                 category_cd,
                 title,
@@ -33,7 +27,7 @@
     </insert>
 
     <!-- 글 상세 데이터 GET -->
-    <select id="getBoardDetail" parameterType="int" resultType="board.board_project.dto.BoardDetailDTO">
+    <select id="getBoardDetail" parameterType="int" resultType="board.board_project.dto.response.board.BoardDetailDTO">
         SELECT board_no,
                category_cd,
                title,
@@ -53,7 +47,7 @@
     </select>
 
     <!-- 글 수정 -->
-    <update id="updateBoard" parameterType="board.board_project.dto.UpdateBoardDTO">
+    <update id="updateBoard" parameterType="board.board_project.dto.request.board.UpdateBoardDTO">
         UPDATE bt_tb_board
         SET category_cd = #{category_cd},
             title = #{title},
@@ -112,7 +106,7 @@
     </sql>
 
     <!-- 전체 글 데이터 GET -->
-    <select id="getBoardList" resultType="board.board_project.dto.BoardListDTO">
+    <select id="getBoardList" parameterType="board.board_project.dto.request.board.SearchBoardDTO" resultType="board.board_project.dto.response.board.BoardListDTO">
         SELECT board_no,
                category_cd,
                title,
@@ -138,7 +132,7 @@
     </select>
 
     <!-- 총 데이터 갯수 GET -->
-    <select id="getTotalListAmount" resultType="int">
+    <select id="getTotalListAmount" parameterType="board.board_project.dto.request.board.SearchBoardDTO" resultType="int">
         SELECT COUNT(board_no)
         FROM bt_tb_board
         <include refid="searchBoardList"/>

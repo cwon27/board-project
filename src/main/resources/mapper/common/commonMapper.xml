@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board.board_project.mapper.common.CommonMapper">
+    <!-- 카테고리값 GET -->
+    <select id="getCategoryData" resultType="board.board_project.dto.response.common.CategoryDTO">
+        SELECT comm_cd,
+        comm_cd_nm
+        FROM bt_tb_comm_code
+        WHERE grp_cd = #{groupCode}
+    </select>
+</mapper>
+
+

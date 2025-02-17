@@ -1,7 +1,12 @@
-package board.board_project.service;
+package board.board_project.service.board;
 
-import board.board_project.dto.*;
-import board.board_project.mapper.BoardMapper;
+import board.board_project.dto.request.board.SaveBoardDTO;
+import board.board_project.dto.request.board.SearchBoardDTO;
+import board.board_project.dto.request.board.UpdateBoardDTO;
+import board.board_project.dto.response.board.BoardDetailDTO;
+import board.board_project.dto.response.board.BoardListDTO;
+import board.board_project.dto.response.common.CategoryDTO;
+import board.board_project.mapper.board.BoardMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +17,6 @@ public class BoardService {
 
     public BoardService(BoardMapper boardMapper) {
         this.boardMapper = boardMapper;
-    }
-
-    //카테고리 값 GET
-    public List<CategoryDTO> getCategoryData() {
-        return boardMapper.getCategoryData();
     }
 
     //글 등록시 유효성 검사
@@ -93,21 +93,14 @@ public class BoardService {
     }
 
     //전체 글 데이터 GET
-    public List<BoardListDTO> getBoardList(String searchCategoryType,
-                                           String searchType,
-                                           String searchKeyword,
-                                           String sortType,
-                                           int page,
-                                           int pageSize) {
-        int offset = (page - 1) * pageSize;
-        return boardMapper.getBoardList(searchCategoryType, searchType, searchKeyword, sortType, pageSize, offset);
+    public List<BoardListDTO> getBoardList(SearchBoardDTO searchBoardDTO) {
+        searchBoardDTO.calculateOffset();
+        return boardMapper.getBoardList(searchBoardDTO);
     }
 
     //총 데이터 갯수 GET
-    public int getTotalListAmount(String searchCategoryType,
-                                  String searchType,
-                                  String searchKeyword) {
-        return boardMapper.getTotalListAmount(searchCategoryType, searchType, searchKeyword);
+    public int getTotalListAmount(SearchBoardDTO searchBoardDTO) {
+        return boardMapper.getTotalListAmount(searchBoardDTO);
     }
 
     //조회수

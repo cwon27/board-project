@@ -1,4 +1,4 @@
-package board.board_project.config;
+package board.board_project.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
