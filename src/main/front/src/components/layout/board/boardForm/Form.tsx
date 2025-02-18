@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { Category } from "../Category";
 import { ToastEditor } from "./ToastEditor";
+import { CategoryState } from "../../../../store/text.atom";
+import { Link } from "react-router-dom";
 
-interface FormTableProps {
+
+interface FormProps {
+  //통해서 등록인지 수정인지 구분분
   isUpdate: boolean;
 }
 
-export const FormTable = ({ isUpdate }: FormTableProps) => {
+export const Form = ({ isUpdate }: FormProps) => {
+  //글 등록인 경우 카테고리값 기본값으로 초기화
+  const [selectedCategory, setSelectedCategory] = useRecoilState(CategoryState);
+  //취소를 누르면 검색 조건 유지
+  const [beforeCategory,setBeforeCategory]=useState(selectedCategory);
+
+  useEffect(() => {
+    if (!isUpdate) {
+      setSelectedCategory({
+        comm_cd: "ALL",
+        comm_cd_nm: "전체",
+      });
+    }
+  }, [isUpdate, setSelectedCategory]);
+
+  const handleCancel = () => {
+    setSelectedCategory(beforeCategory); 
+  };
+
   return (
+    <>
     <table className="write">
       <colgroup>
         <col style={{ width: "150px" }} />
@@ -33,10 +59,7 @@ export const FormTable = ({ isUpdate }: FormTableProps) => {
             카테고리 <i className="req">*</i>
           </th>
           <td colSpan={3}>
-            <select className="select" style={{ width: "150px" }}>
-              <option>전체</option>
-              <option>-</option>
-            </select>
+            <Category/>
           </td>
         </tr>
         <tr>
@@ -60,26 +83,12 @@ export const FormTable = ({ isUpdate }: FormTableProps) => {
             첨부파일 1 <i className="req">*</i>
           </th>
           <td colSpan={3}>
-            <span>
-              <a href="#">상담내역1.xlsx</a>
-              <a href="#" className="ic-del">
-                삭제
-              </a>
-            </span>
-            <br />
             <input type="file" className="input block mt10" />
           </td>
         </tr>
         <tr>
           <th className="fir">첨부파일 2</th>
           <td colSpan={3}>
-            <span>
-              <a href="#">상담내역2.xlsx</a>
-              <a href="#" className="ic-del">
-                삭제
-              </a>
-            </span>
-            <br />
             <input type="file" className="input block mt10" />
           </td>
         </tr>
@@ -91,5 +100,14 @@ export const FormTable = ({ isUpdate }: FormTableProps) => {
         </tr>
       </tbody>
     </table>
+    <div className="btn-box r">
+    <Link to="#" className="btn btn-red">
+      저장
+    </Link>
+    <Link to="/board/list" className="btn btn-default" onClick={handleCancel}>
+      취소
+    </Link>
+  </div>
+  </>
   );
 };

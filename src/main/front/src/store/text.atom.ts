@@ -1,15 +1,17 @@
 import { atom } from "recoil";
-import { BoardList } from "../model/types";
+import { CategoryData } from "../model/types";
 
-export const boardListState = atom<BoardList[]>({
-    key: "boardListState",
-    default: []
+//카테고리 타입 상태
+export const CategoryState = atom<CategoryData>({
+    key:"CategoryState",
+    default:{
+        comm_cd: "ALL",
+        comm_cd_nm: "전체"
+    }
 });
 
-export const totalListAmountState = atom<number>({
-    key: "totalListAmountState",
-    default: 0
-});
+
+
 
 
 

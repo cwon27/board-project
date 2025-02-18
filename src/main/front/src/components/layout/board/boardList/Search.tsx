@@ -1,3 +1,5 @@
+import { Category } from "../Category";
+
 export const Search = () => {
   return (
     <>
@@ -11,10 +13,7 @@ export const Search = () => {
             <tr>
               <th>카테고리</th>
               <td>
-                <select className="select" style={{ width: "150px" }}>
-                  <option>전체</option>
-                  <option>-</option>
-                </select>
+                <Category/>
               </td>
             </tr>
             <tr>

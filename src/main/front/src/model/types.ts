@@ -1,13 +1,26 @@
+//Read시 필요한 BoardList
 export interface BoardList {
     board_no: number;
-    category_cd : String;
-    title : String;
-    writer_nm : String;
+    category_cd : string;
+    title : string;
+    writer_nm : string;
     view_cnt : number;
-    reg_dt : String;
+    reg_dt : string;
+}
+ 
+//Category값
+export interface CategoryData {
+    comm_cd : string;
+    comm_cd_nm : string;
 }
 
-export interface Category {
-    comm_cd : String;
-    comm_cd_nm : String;
+//Creaete, Update시 필요한 데이터
+export interface BoardData{
+    category_cd : string;
+    title : string;
+    cont : string;
+    writer_nm: string;
+    password : string;
 }
+
+//파일 데이터

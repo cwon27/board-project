@@ -1840,6 +1840,10 @@ table.write tbody td {
 table.write tbody .fir {
   border-left: none;
 }
+
+table.write tbody .fir:nth-of-type(2) {
+  border-left: #e1e2e6 1px solid;
+}
 table.write tbody .dv-edit {
   padding: 0;
 }

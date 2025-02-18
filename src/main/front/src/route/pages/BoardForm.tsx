@@ -1,5 +1,4 @@
-import { FormTable } from "../../components/layout/board/boardForm/FormTable";
-import { FormBtn } from "../../components/layout/board/boardForm/FormBtn";
+import { Form } from "../../components/layout/board/boardForm/Form";
 
 interface BoardFormProps {
   isUpdate: boolean;
@@ -8,8 +7,7 @@ interface BoardFormProps {
 export const BoardForm = ({ isUpdate }: BoardFormProps) => {
   return (
     <>
-      <FormTable isUpdate={isUpdate} />
-      <FormBtn isUpdate={isUpdate} />
+      <Form isUpdate={isUpdate} />
     </>
   );
 };
