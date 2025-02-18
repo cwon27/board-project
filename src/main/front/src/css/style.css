@@ -472,7 +472,7 @@ input[type="radio"] {
   padding: 0 15px;
   line-height: 24px;
   min-width: 55px;
-  margin: 0;
+  margin-left: 5px;
   height: 24px;
   font-size: 12px;
   text-align: center;
@@ -611,35 +611,35 @@ input[type="radio"] {
 /************************************************
 	layout
 ************************************************/
-#wrap {
+.wrap {
   position: relative;
   min-width: 1280px;
   width: 100%;
   margin: 0;
 }
-#header {
+.header {
   position: relative;
   border-bottom: #ce2d46 2px solid;
 }
-#header .div-utill {
+.header .div-utill {
   background-color: #ce2d46;
   height: 38px;
 }
-#header .div-utill > ul {
+.header .div-utill > ul {
   text-align: right;
   padding: 0 146px 0 0;
 }
-#header .div-utill > ul > li {
+.header .div-utill > ul > li {
   line-height: 38px;
   display: inline-block;
   vertical-align: middle;
 }
-#header .div-utill > ul > li.user {
+.header .div-utill > ul > li.user {
   color: #fff;
   font-size: 11px;
   margin-right: 5px;
 }
-#header .div-utill > ul > li.user:before {
+.header .div-utill > ul > li.user:before {
   content: "";
   width: 10px;
   height: 11px;
@@ -648,10 +648,10 @@ input[type="radio"] {
   margin-right: 4px;
   vertical-align: middle;
 }
-#header .div-utill > ul > li.lnk {
+.header .div-utill > ul > li.lnk {
   margin-left: 10px;
 }
-#header .div-utill > ul > li.lnk a {
+.header .div-utill > ul > li.lnk a {
   position: relative;
   color: #eaa8a8;
   font-family: "Noto Sans KR", "돋움", "굴림", serif;
@@ -660,7 +660,7 @@ input[type="radio"] {
   display: inline-block;
   vertical-align: middle;
 }
-#header .div-utill > ul > li.lnk a + a:before {
+.header .div-utill > ul > li.lnk a + a:before {
   content: "";
   width: 1px;
   height: 8px;
@@ -671,7 +671,7 @@ input[type="radio"] {
   display: block;
   background-color: #e67385;
 }
-#header .div-utill > ul > li.user-info > .input {
+.header .div-utill > ul > li.user-info > .input {
   display: inline-block;
   border: 1px solid #b50621;
   border-radius: 3px;
@@ -680,51 +680,51 @@ input[type="radio"] {
   font-size: 11px;
   color: #666;
 }
-#header .head-inner {
+.header .head-inner {
   position: relative;
   height: 70px;
   background: url("../images/bg_gnb.gif") 0 0 repeat-x;
 }
-#header h1.logo {
+.header h1.logo {
   position: absolute;
   top: 15px;
   left: 40px;
   width: 133px;
   z-index: 9;
 }
-#header h1.logo a {
+.header h1.logo a {
   background: url("../images/interplug_footer_logo.png") 50% 50% no-repeat;
   display: block;
   height: 38px;
   text-indent: -9999px;
 }
 
-body#index #header .div-utill > ul {
+body.index #header .div-utill > ul {
   width: 980px;
   margin: 0 auto;
   padding: 0;
   text-align: right;
 }
-body#index #header .head-inner h1.logo {
+body.index #header .head-inner h1.logo {
   left: 50%;
   margin-left: -490px;
 }
 
-#gnb-wrap {
+.gnb-wrap {
   position: relative;
   padding: 0 0 0 180px;
 }
-#gnb-wrap #gnb:after {
+.gnb-wrap .gnb:after {
   content: ".";
   display: block;
   height: 0;
   clear: both;
   visibility: hidden;
 }
-#gnb-wrap #gnb > li {
+.gnb-wrap .gnb > li {
   float: left;
 }
-#gnb-wrap #gnb > li > a {
+.gnb-wrap .gnb > li > a {
   display: block;
   padding: 0 44px;
   padding: 0 40px\0 / IE8 + 9;
@@ -734,29 +734,29 @@ body#index #header .head-inner h1.logo {
   line-height: 70px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#gnb-wrap #gnb > li:last-child > a {
+.gnb-wrap .gnb > li:last-child > a {
   padding-right: 0;
 }
-#gnb-wrap #gnb > li > a:hover {
+.gnb-wrap .gnb > li > a:hover {
   color: #ce2d46;
 }
-#gnb-wrap #gnb > li > .deth2 {
+.gnb-wrap .gnb > li > .deth2 {
   display: none;
 }
 
-body#index #gnb-wrap {
+body.index .gnb-wrap {
   width: 980px;
   margin: 0 auto;
 }
 
-#container {
+.container {
   position: relative;
   display: table;
   width: 100%;
   min-height: 645px;
   padding: 0 160px 0 10px;
 }
-#container:before {
+.container:before {
   content: "";
   position: absolute;
   top: 0;
@@ -767,20 +767,20 @@ body#index #gnb-wrap {
   border-left: #ececec 1px solid;
   border-right: #ececec 1px solid;
 }
-#contents {
+.contents {
   position: relative;
   display: table-cell;
   vertical-align: top;
-  padding: 0 0 50px 30px;
+  padding: 0 0 100px 30px;
 }
-#lm {
+.lm {
   position: relative;
   width: 210px;
   display: table-cell;
   vertical-align: top;
   padding: 0 0 20px 0;
 }
-#lm > h2.h2-tit {
+.lm > h2.h2-tit {
   position: relative;
   background-color: #ce2d46;
   padding: 14px 0 0 0;
@@ -788,7 +788,7 @@ body#index #gnb-wrap {
   width: 100%;
   height: 90px;
 }
-#lm > h2.h2-tit:before {
+.lm > h2.h2-tit:before {
   content: "";
   width: 16px;
   height: 1px;
@@ -799,7 +799,7 @@ body#index #gnb-wrap {
   left: 50%;
   margin-left: -8px;
 }
-#lm > h2.h2-tit strong {
+.lm > h2.h2-tit strong {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
@@ -809,7 +809,7 @@ body#index #gnb-wrap {
   font-weight: 500;
   line-height: 1.1;
 }
-#snb > li > a {
+.snb > li > a {
   position: relative;
   font-size: 13px;
   color: #333;
@@ -819,7 +819,7 @@ body#index #gnb-wrap {
   border-right: #ececec 1px solid;
   border-left: #ececec 1px solid;
 }
-#snb > li > a:after {
+.snb > li > a:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -830,30 +830,30 @@ body#index #gnb-wrap {
   height: 9px;
   margin-top: -4px;
 }
-#snb > li > a:hover,
-#snb > li.active > a {
+.snb > li > a:hover,
+.snb > li.active > a {
   background-color: #fb546e;
   border-color: #fb546e;
   font-weight: 600;
   color: #fff;
 }
-#snb > li > a:hover:after,
-#snb > li.active > a:after {
+.snb > li > a:hover:after,
+.snb > li.active > a:after {
   right: 9px;
   background: url("../images/sp_img.png") -178px -32px no-repeat;
   width: 6px;
   height: 9px;
   margin-top: -4px;
 }
-#snb > li.hasSub > a:hover:after,
-#snb > li.hasSub.active > a:after {
+.snb > li.hasSub > a:hover:after,
+.snb > li.hasSub.active > a:after {
   right: 9px;
   background: url("../images/sp_img.png") -58px -5px no-repeat;
   width: 9px;
   height: 6px;
   margin-top: -3px;
 }
-#snb > li > ul {
+.snb > li > ul {
   background-color: #fafafa;
   padding: 14px 15px;
   border-left: #ececec 1px solid;
@@ -861,13 +861,13 @@ body#index #gnb-wrap {
   border-bottom: #ececec 1px solid;
   display: none;
 }
-#snb > li > ul > li > a {
+.snb > li > ul > li > a {
   display: block;
   padding: 5px 0 5px 10px;
   font-size: 12px;
   text-indent: -10px;
 }
-#snb > li > ul > li > a:before {
+.snb > li > ul > li > a:before {
   content: "";
   background: url("../images/sp_img.png") -90px -4px no-repeat;
   width: 4px;
@@ -876,24 +876,24 @@ body#index #gnb-wrap {
   margin-right: 5px;
   font-size: 11px;
 }
-#snb > li > ul > li > a:hover,
-#snb > li > ul > li.active > a {
+.snb > li > ul > li > a:hover,
+.snb > li > ul > li.active > a {
   color: #e3475f;
 }
-#snb > li > ul > li > a:hover:before,
-#snb > li > ul > li.active > a:before {
+.snb > li > ul > li > a:hover:before,
+.snb > li > ul > li.active > a:before {
   background: url("../images/sp_img.png") -120px -4px no-repeat;
 }
 
-#lm .lm-brn {
+.lm .lm-brn {
   margin: 35px 0 0 0;
   padding: 0 10px;
 }
-#lm .lm-brn > li {
+.lm .lm-brn > li {
   position: relative;
   padding: 14px 0 14px 65px;
 }
-#lm .lm-brn > li strong {
+.lm .lm-brn > li strong {
   display: block;
   font-size: 14px;
   color: #333;
@@ -901,21 +901,21 @@ body#index #gnb-wrap {
   font-weight: 600;
   text-transform: uppercase;
 }
-#lm .lm-brn > li span {
+.lm .lm-brn > li span {
   display: block;
   color: #629005;
   font-size: 16px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-weight: 600;
 }
-#lm .lm-brn > li a {
+.lm .lm-brn > li a {
   display: block;
   color: #ce2d46;
   font-size: 14px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-weight: 600;
 }
-#lm .lm-brn > li a:after {
+.lm .lm-brn > li a:after {
   content: "";
   width: 5px;
   height: 7px;
@@ -923,10 +923,10 @@ body#index #gnb-wrap {
   background: url("../images/sp_img.png") -179px -4px no-repeat;
   margin-left: 7px;
 }
-#lm .lm-brn > li + li {
+.lm .lm-brn > li + li {
   border-top: #ececec 1px solid;
 }
-#lm .lm-brn > li:after {
+.lm .lm-brn > li:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -937,25 +937,25 @@ body#index #gnb-wrap {
   display: block;
   background: url("../images/lm_brn1.png");
 }
-#lm .lm-brn > li.item1:after {
+.lm .lm-brn > li.item1:after {
   background-image: url("../images/lm_brn1.png");
 }
-#lm .lm-brn > li.item2:after {
+.lm .lm-brn > li.item2:after {
   background-image: url("../images/lm_brn2.png");
 }
-#lm .lm-brn > li.item3:after {
+.lm .lm-brn > li.item3:after {
   background-image: url("../images/lm_brn3.png");
 }
 
-#footer {
+.footer {
   border-top: #f6f6f6 1px solid;
   padding: 25px 0;
 }
-#footer .footer-wrap {
+.footer .footer-wrap {
   position: relative;
   padding: 0 0 0 310px;
 }
-#footer .footer-wrap:before {
+.footer .footer-wrap:before {
   content: "";
   position: absolute;
   top: 50%;
@@ -964,39 +964,39 @@ body#index #gnb-wrap {
   margin-top: -13px;
   background: url("../images/interplug_footer_logo.png") 0 0 no-repeat;
   width: 100px;
-  height: 26px;
+  height: 70px;
 }
-#footer .footer-wrap .footer-link li {
+.footer .footer-wrap .footer-link li {
   display: inline-block;
 }
-#footer .footer-wrap .footer-link li a {
+.footer .footer-wrap .footer-link li a {
   font-size: 11px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-weight: 600;
 }
-#footer .footer-wrap .footer-link li:first-child {
+.footer .footer-wrap .footer-link li:first-child {
   margin-right: 10px;
 }
-#footer .footer-wrap .footer-link li:first-child a {
+.footer .footer-wrap .footer-link li:first-child a {
   color: #6f5d28;
 }
-#footer .footer-wrap address {
+.footer .footer-wrap address {
   margin: 10px 0 5px;
   color: #959595;
   font-size: 11px;
 }
-#footer .footer-wrap .copy {
+.footer .footer-wrap .copy {
   color: #959595;
   font-size: 11px;
   text-transform: uppercase;
 }
-#footer .footer-wrap .famliy-link {
+.footer .footer-wrap .famliy-link {
   position: absolute;
   top: 0;
   right: 15px;
   width: 240px;
 }
-#footer .footer-wrap .famliy-link > button {
+.footer .footer-wrap .famliy-link > button {
   position: relative;
   background-color: #dbdbdb;
   border: none;
@@ -1011,7 +1011,7 @@ body#index #gnb-wrap {
   font-weight: 600;
   cursor: pointer;
 }
-#footer .footer-wrap .famliy-link > button:after {
+.footer .footer-wrap .famliy-link > button:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -1022,7 +1022,7 @@ body#index #gnb-wrap {
   display: block;
   background: url("../images/sp_img.png") -146px -4px no-repeat;
 }
-#footer .footer-wrap .famliy-link > ul {
+.footer .footer-wrap .famliy-link > ul {
   background-color: #dbdbdb;
   position: absolute;
   bottom: 37px;
@@ -1034,21 +1034,21 @@ body#index #gnb-wrap {
   z-index: 9999;
   display: none;
 }
-#footer .footer-wrap .famliy-link > ul > li > a {
+.footer .footer-wrap .famliy-link > ul > li > a {
   display: block;
   padding: 8px 20px;
   color: #fff;
 }
 
-body#index #footer .footer-wrap {
+body.index .footer .footer-wrap {
   width: 980px;
   margin: 0 auto;
   padding: 0 0 0 170px;
 }
-body#index #footer .footer-wrap:before {
+body.index .footer .footer-wrap:before {
   left: 0;
 }
-body#index #footer .footer-wrap .famliy-link {
+body.index .footer .footer-wrap .famliy-link {
   right: 0;
 }
 
@@ -1112,9 +1112,9 @@ body#index #footer .footer-wrap .famliy-link {
 }
 
 /* popup */
-#pop-wrap {
+.pop-wrap {
 }
-#pop-wrap h1.pop-tit {
+.pop-wrap h1.pop-tit {
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   background-color: #fb546e;
   line-height: 45px;
@@ -1122,21 +1122,21 @@ body#index #footer .footer-wrap .famliy-link {
   padding: 0 20px;
   color: #fff;
 }
-#pop-wrap .pop-con {
+.pop-wrap .pop-con {
   padding: 25px 20px;
 }
-#pop-wrap .pop-con h2 {
+.pop-wrap .pop-con h2 {
   font-size: 13px;
   color: #333;
   font-weight: 600;
   margin: 20px 0 10px;
 }
-#pop-wrap .pop-con > p > span.big-tx {
+.pop-wrap .pop-con > p > span.big-tx {
   font-size: 18px;
   font-weight: 600;
 }
 
-#pop-wrap-sm {
+.pop-wrap-sm {
   border: #fb546e 2px solid;
   padding: 30px 20px;
 }
@@ -1144,35 +1144,35 @@ body#index #footer .footer-wrap .famliy-link {
 /************************************************
 	main
 ************************************************/
-#indexWrap {
+.indexWrap {
   position: relative;
   width: 980px;
   margin: 0 auto;
   padding: 0 0 50px 0;
 }
-#indexWrap .main-top:after,
-#indexWrap .main-middle:after {
+.indexWrap .main-top:after,
+.indexWrap .main-middle:after {
   content: ".";
   display: block;
   height: 0;
   clear: both;
   visibility: hidden;
 }
-#indexWrap .main-slide {
+.indexWrap .main-slide {
   position: relative;
   overflow: hidden;
   width: 655px;
   height: 309px;
   float: left;
 }
-#indexWrap .main-slide .pagination {
+.indexWrap .main-slide .pagination {
   position: absolute;
   bottom: 10px;
   left: 0;
   width: 100%;
   text-align: center;
 }
-#indexWrap .main-slide .pagination .swiper-pagination-switch {
+.indexWrap .main-slide .pagination .swiper-pagination-switch {
   width: 10px;
   height: 10px;
   display: inline-block;
@@ -1183,7 +1183,7 @@ body#index #footer .footer-wrap .famliy-link {
   opacity: 1;
   cursor: pointer;
 }
-#indexWrap
+.indexWrap
   .main-slide
   .pagination
   .swiper-pagination-switch.swiper-active-switch {
@@ -1192,14 +1192,14 @@ body#index #footer .footer-wrap .famliy-link {
   opacity: 1;
 }
 
-#indexWrap .m-login {
+.indexWrap .m-login {
   background: #f9f9f9 url("../images/bg_login.jpg") 207px 34px no-repeat;
   width: 325px;
   height: 309px;
   float: left;
   padding: 92px 30px 0 30px;
 }
-#indexWrap .m-login h2 {
+.indexWrap .m-login h2 {
   font-size: 24px;
   color: #000;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
@@ -1208,27 +1208,27 @@ body#index #footer .footer-wrap .famliy-link {
   padding: 0;
   line-height: 1;
 }
-#indexWrap .m-login h2 strong {
+.indexWrap .m-login h2 strong {
   font-size: 24px;
   color: #000;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .m-login .form-bx {
+.indexWrap .m-login .form-bx {
   position: relative;
   padding: 0 75px 0 0;
   margin-top: 15px;
 }
-#indexWrap .m-login .form-bx .input {
+.indexWrap .m-login .form-bx .input {
   display: block;
   width: 100%;
   border-color: #e6e6e6;
   height: 25px;
   line-height: 25px;
 }
-#indexWrap .m-login .form-bx .input + .input {
+.indexWrap .m-login .form-bx .input + .input {
   margin-top: 5px;
 }
-#indexWrap .m-login .form-bx .bt-login {
+.indexWrap .m-login .form-bx .bt-login {
   position: absolute;
   top: 0;
   right: 0;
@@ -1243,27 +1243,27 @@ body#index #footer .footer-wrap .famliy-link {
   line-height: 82px;
   background-color: #ce2d46;
 }
-#indexWrap .m-login .link-bx {
+.indexWrap .m-login .link-bx {
   margin: 15px 0 0 0;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .m-login .link-pay {
+.indexWrap .m-login .link-pay {
   margin: 10px 0 0 0;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-weight: bold;
 }
-#indexWrap .m-login .link-bx * {
+.indexWrap .m-login .link-bx * {
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-size: 12px;
   color: #666;
 }
-#indexWrap .m-login .link-bx a {
+.indexWrap .m-login .link-bx a {
   position: relative;
   display: inline-block;
   margin: 0 8px 0 0;
   padding: 0 8px 0 0;
 }
-#indexWrap .m-login .link-bx a:after {
+.indexWrap .m-login .link-bx a:after {
   content: "";
   position: absolute;
   top: 50%;
@@ -1275,33 +1275,33 @@ body#index #footer .footer-wrap .famliy-link {
   display: block;
 }
 
-#indexWrap .user-area {
+.indexWrap .user-area {
   background: #f9f9f9 url("../images/bg_login.jpg") 207px 34px no-repeat;
   width: 325px;
   height: 309px;
   float: left;
   padding: 92px 30px 0 30px;
 }
-#indexWrap .user-area h2 strong {
+.indexWrap .user-area h2 strong {
   font-size: 24px;
   color: #000;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .user-area > ul {
+.indexWrap .user-area > ul {
   background-color: #fff;
   width: 260px;
   padding: 25px 0 45px 15px;
   margin: 3px 0 0 0;
 }
-#indexWrap .user-area > ul > li {
+.indexWrap .user-area > ul > li {
   margin: 10px 0 0 0;
   color: #333;
 }
-#indexWrap .user-area > ul > li.user strong {
+.indexWrap .user-area > ul > li.user strong {
   color: #fb546e;
 }
 
-#indexWrap .m-notice {
+.indexWrap .m-notice {
   position: relative;
   float: left;
   width: 655px;
@@ -1309,7 +1309,7 @@ body#index #footer .footer-wrap .famliy-link {
   padding: 35px 30px 0 30px;
   border-left: #e5e5e5 1px solid;
 }
-#indexWrap .m-notice h2 {
+.indexWrap .m-notice h2 {
   font-size: 22px;
   color: #000;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
@@ -1317,12 +1317,12 @@ body#index #footer .footer-wrap .famliy-link {
   padding: 0;
   margin: 0 0 25px 0;
 }
-#indexWrap .m-notice ul li {
+.indexWrap .m-notice ul li {
   position: relative;
   border-top: #eaeaea 1px solid;
   padding: 0 110px 0 0;
 }
-#indexWrap .m-notice ul li a {
+.indexWrap .m-notice ul li a {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1332,7 +1332,7 @@ body#index #footer .footer-wrap .famliy-link {
   line-height: 40px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .m-notice ul li .date {
+.indexWrap .m-notice ul li .date {
   position: absolute;
   top: 0;
   right: 0;
@@ -1342,7 +1342,7 @@ body#index #footer .footer-wrap .famliy-link {
   line-height: 40px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .m-notice .bt-more {
+.indexWrap .m-notice .bt-more {
   position: absolute;
   top: 34px;
   display: block;
@@ -1353,13 +1353,13 @@ body#index #footer .footer-wrap .famliy-link {
   text-indent: -9999px;
 }
 
-#indexWrap .m-brn {
+.indexWrap .m-brn {
   position: relative;
   float: left;
   width: 325px;
   height: 278px;
 }
-#indexWrap .m-brn a {
+.indexWrap .m-brn a {
   display: block;
   height: 278px;
   text-align: center;
@@ -1369,11 +1369,11 @@ body#index #footer .footer-wrap .famliy-link {
   font-size: 18px;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .m-brn a img {
+.indexWrap .m-brn a img {
   display: block;
   margin: 0 auto 14px;
 }
-#indexWrap .m-brn a .bt-view {
+.indexWrap .m-brn a .bt-view {
   display: block;
   margin: 22px auto 0;
   width: 110px;
@@ -1383,7 +1383,7 @@ body#index #footer .footer-wrap .famliy-link {
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   font-size: 14px;
 }
-#indexWrap .m-brn a .bt-view:after {
+.indexWrap .m-brn a .bt-view:after {
   content: "";
   width: 6px;
   height: 11px;
@@ -1393,38 +1393,38 @@ body#index #footer .footer-wrap .famliy-link {
   background: url("../images/sp_img.png") -149px -31px no-repeat;
 }
 
-#indexWrap .main-brn2 {
+.indexWrap .main-brn2 {
   border: #e5e5e5 1px solid;
   border-top: #f6f6f6 1px solid;
 }
-#indexWrap .main-brn2:after {
+.indexWrap .main-brn2:after {
   content: ".";
   display: block;
   height: 0;
   clear: both;
   visibility: hidden;
 }
-#indexWrap .main-brn2 dl {
+.indexWrap .main-brn2 dl {
   float: left;
 }
-#indexWrap .main-brn2 dl.item1 {
+.indexWrap .main-brn2 dl.item1 {
   width: 327px;
   height: 260px;
   background-color: #edfbf1;
 }
-#indexWrap .main-brn2 dl.item2 {
+.indexWrap .main-brn2 dl.item2 {
   width: 327px;
   height: 260px;
   background-color: #fffff7;
   border-left: #e5e5e5 1px solid;
 }
-#indexWrap .main-brn2 dl.item3 {
+.indexWrap .main-brn2 dl.item3 {
   width: 324px;
   height: 260px;
   background-color: #fdf8f5;
   border-left: #e5e5e5 1px solid;
 }
-#indexWrap .main-brn2 dl dt {
+.indexWrap .main-brn2 dl dt {
   padding: 103px 0 0 0;
   margin: 0 0 10px 0;
   text-align: center;
@@ -1434,29 +1434,29 @@ body#index #footer .footer-wrap .famliy-link {
   font-weight: 600;
   text-transform: uppercase;
 }
-#indexWrap .main-brn2 dl.item1 dt {
+.indexWrap .main-brn2 dl.item1 dt {
   background: url(../images/m_brn0201.png) 50% 22px no-repeat;
 }
-#indexWrap .main-brn2 dl.item2 dt {
+.indexWrap .main-brn2 dl.item2 dt {
   background: url(../images/m_brn0202.png) 50% 22px no-repeat;
 }
-#indexWrap .main-brn2 dl.item3 dt {
+.indexWrap .main-brn2 dl.item3 dt {
   background: url(../images/m_brn0203.png) 50% 22px no-repeat;
 }
-#indexWrap .main-brn2 dl dd {
+.indexWrap .main-brn2 dl dd {
   text-align: center;
   font-size: 14px;
   color: #666;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .main-brn2 dl dd .tel {
+.indexWrap .main-brn2 dl dd .tel {
   display: block;
   font-size: 26px;
   color: #000;
   margin: 5px 0;
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
 }
-#indexWrap .main-brn2 dl dd .bt-view {
+.indexWrap .main-brn2 dl dd .bt-view {
   display: block;
   width: 86px;
   height: 34px;
@@ -1465,10 +1465,10 @@ body#index #footer .footer-wrap .famliy-link {
   font-family: "Nanum Barun Gothic", "돋움", "굴림", serif;
   margin: 25px auto 0;
 }
-#indexWrap .main-brn2 dl.item2 dd .bt-view {
+.indexWrap .main-brn2 dl.item2 dd .bt-view {
   background-color: #91916f;
 }
-#indexWrap .main-brn2 dl.item3 dd .bt-view {
+.indexWrap .main-brn2 dl.item3 dd .bt-view {
   background-color: #7f6d62;
 }
 
@@ -1852,6 +1852,7 @@ table.view .ic-del {
   text-align: left;
   display: inline-block;
   background: #7c808b url("../images/sp_img.png") -74px -68px no-repeat;
+  margin-left: 5px;
 }
 .ic-file2:before {
   content: "";
@@ -1919,7 +1920,7 @@ table.view .ic-del {
 .paginate_complex strong {
   display: inline-block;
   position: relative;
-  margin: 0 2px;
+  margin: 0 5px;
   min-width: 24px;
   padding: 0;
   font: normal 12px/22px Tahoma, Sans-serif;
@@ -2217,13 +2218,13 @@ table.view .ic-del {
 }
 
 /* error-bx */
-#container.error {
+.container.error {
   display: block;
   padding: 0;
   vertical-align: middle;
   text-align: center;
 }
-#container.error:before {
+.container.error:before {
   display: none;
 }
 .error-bx {
@@ -3033,8 +3034,10 @@ h4.h4-tit2 .sub-tx {
 
 span.spanTitle {
   line-height: 25px;
+  margin-right: 5px;
 }
 img.new {
   width: 30px;
   vertical-align: sub;
+  margin-left: 2px;
 }

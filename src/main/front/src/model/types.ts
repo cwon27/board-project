@@ -11,4 +11,3 @@ export interface Category {
     comm_cd : String;
     comm_cd_nm : String;
 }
-
