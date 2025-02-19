@@ -3045,3 +3045,24 @@ img.new {
   vertical-align: sub;
   margin-left: 2px;
 }
+
+/* 채원 추가 */
+.file-label{
+  padding: 10px;
+  border: 1px solid #c2c4ca;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.file-del-btn{
+  padding: 5px;
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  color:#ce2d46;
+  font-weight: bold;
+}
+
+.file-style{
+  height: 58px;
+}

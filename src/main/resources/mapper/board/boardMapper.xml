@@ -5,7 +5,10 @@
 <mapper namespace="board.board_project.mapper.board.BoardMapper">
 
     <!-- 글 등록 -->
-    <insert id="saveBoard" parameterType="board.board_project.dto.request.board.SaveBoardDTO">
+    <insert id="saveBoard"
+            parameterType="board.board_project.dto.request.board.SaveBoardDTO"
+            useGeneratedKeys="true"
+            keyProperty="board_no">
         INSERT INTO bt_tb_board(
                 category_cd,
                 title,

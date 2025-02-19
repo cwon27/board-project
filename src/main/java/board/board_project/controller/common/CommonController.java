@@ -17,6 +17,10 @@ import java.util.Map;
 public class CommonController {
     private final CommonService commonService;
 
+    //공통코드 : 공통코드명
+    //공통코드 테이블에서 데이터 가져오기
+    private final String groupCode = "CTG";
+
     public CommonController(CommonService commonService) {
         this.commonService = commonService;
     }
@@ -24,9 +28,6 @@ public class CommonController {
     //카테고리 값 뿌려주는 api -> 카테고리에 해당하는 코드만 나와야함
     @GetMapping("/category")
     public ResponseEntity<Map<String, Object>> getCategoryData() {
-        //공통코드 : 공통코드명
-        //공통코드 테이블에서 데이터 가져오기\
-        String groupCode = "CTG";
         List<CategoryDTO> categoryData = commonService.getCategoryData(groupCode);
 
         Map<String, Object> response = new HashMap<>();

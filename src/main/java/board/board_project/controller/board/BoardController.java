@@ -6,17 +6,20 @@ import board.board_project.dto.request.board.SearchBoardDTO;
 import board.board_project.dto.request.board.UpdateBoardDTO;
 import board.board_project.dto.response.board.BoardDetailDTO;
 import board.board_project.dto.response.board.BoardListDTO;
-import board.board_project.dto.response.common.CategoryDTO;
 import board.board_project.service.board.BoardService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {
@@ -30,23 +33,26 @@ public class BoardController {
 
     //글 등록(Create) api
     @PostMapping("/save")
-    public ResponseEntity<Map<String, String>> saveBoard(@RequestBody SaveBoardDTO saveBoardDTO) {
+    public ResponseEntity<Map<String, Object>> saveBoard(MultipartHttpServletRequest request) {
+        SaveBoardDTO saveBoardDTO = objectMapper.readValue(request.getParameter("formData"), SaveBoardDTO.class);
+        List<MultipartFile> fileItems = request.getFiles("fileItems");
+
         //받아온 데이터 한번 더 유효성 검사
         boardService.checkData(saveBoardDTO);
 
         //비번 암호화
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
 
-        int result = boardService.saveBoard(saveBoardDTO);
+        int board_no = boardService.saveBoard(saveBoardDTO);
 
-        Map<String, String> response = new HashMap<>();
-        if (result > 0) {
+        Map<String, Object> response = new HashMap<>();
+        if (board_no > 0) {
             //저장 성공
-            response.put("message", "게시글 등록 성공");
-            //window.location.href = response.redirectUrl으로 사용할 거임 -> front에서 처리
-            response.put("redirectUrl", "http://localhost:5173");
+            response.put("success", true);
+            log.info("@@@@@@@@@fileItems : {}",fileItems );
+
         } else {
-            response.put("message", "게시글 등록 실패");
+            response.put("success", false);
         }
 
         return ResponseEntity.ok(response);

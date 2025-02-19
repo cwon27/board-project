@@ -22,10 +22,7 @@ public class BoardService {
     //글 등록시 유효성 검사
     public void checkData(SaveBoardDTO saveBoardDTO) {
         //1. 카테고리
-        if (saveBoardDTO.getCategory_cd() == null || saveBoardDTO.getCategory_cd().trim().isEmpty() ||
-                (!saveBoardDTO.getCategory_cd().equals("CTG001") &&
-                        !saveBoardDTO.getCategory_cd().equals("CTG002") &&
-                        !saveBoardDTO.getCategory_cd().equals("CTG003"))) {
+        if (saveBoardDTO.getCategory_cd() == null || saveBoardDTO.getCategory_cd().trim().isEmpty() || saveBoardDTO.getCategory_cd().equals("ALL")) {
             throw new IllegalArgumentException("카테고리 값이 유효하지 않습니다.");
         }
 
@@ -64,7 +61,8 @@ public class BoardService {
 
     //글 등록
     public int saveBoard(SaveBoardDTO saveBoardDTO) {
-        return boardMapper.saveBoard(saveBoardDTO);
+        boardMapper.saveBoard(saveBoardDTO);
+        return saveBoardDTO.getBoard_no();
     }
 
     //글 상세 데이터 GET

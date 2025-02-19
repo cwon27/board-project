@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SaveBoardDTO {
+    private int board_no = 0;
     private String category_cd; //카테고리 코드
     private String title; //제목
     private String cont; //내용
