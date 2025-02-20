@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import { Category } from "../Category";
 import { ToastEditor } from "./ToastEditor";
-import { CategoryState } from "../../../../store/text.atom";
 import { BoardData, FileItem } from "../../../../model/types";
 import { useMutation } from "@tanstack/react-query";
 import { saveBoard } from "../../../../apis/service";
 import { FileInput } from "./FileInput";
+import { useSearch } from "../../../../hooks/useSearch";
 
 interface FormProps {
   //통해서 등록인지 수정인지 구분
@@ -15,24 +14,21 @@ interface FormProps {
 }
 
 export const Form = ({ isUpdate }: FormProps) => {
-  //** 카테고리 값 초기화
-  //글 등록인 경우 카테고리값 기본값으로 초기화
-  const [selectedCategory, setSelectedCategory] = useRecoilState(CategoryState);
-  //취소를 누르면 검색 조건 유지
-  const [beforeCategory, setBeforeCategory] = useState(selectedCategory);
+  const { search, setSearch, resetSearch,setBeforeSearch } = useSearch();
 
+  //글등록인 경우 카테고리 전체로 초기화
   useEffect(() => {
     if (!isUpdate) {
-      setSelectedCategory({
-        comm_cd: "ALL",
-        comm_cd_nm: "전체",
-      });
+      setSearch((prev) => ({
+        ...prev,
+        searchCategoryType: {
+          comm_cd: "ALL",
+          comm_cd_nm: "전체",
+        },
+      }));
     }
-  }, [isUpdate, setSelectedCategory]);
+  }, [isUpdate, setSearch]);
 
-  const handleCancel = () => {
-    setSelectedCategory(beforeCategory);
-  };
 
   //** 글 등록
   //데이터 상태 관리
@@ -52,13 +48,13 @@ export const Form = ({ isUpdate }: FormProps) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  //카테고리 데이터 변경된 걸 setFormData에 update -> selectedCategory 값이 변할때마다 실행
+  //카테고리 데이터 변경된 걸 setFormData에 update -> search.searchCategoryType 값이 변할때마다 실행
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      category_cd: selectedCategory.comm_cd,
+      category_cd: search.searchCategoryType.comm_cd,
     }));
-  }, [selectedCategory]);
+  }, [search.searchCategoryType]);
 
   //toast-ui에 있는 값
   const handleEditorChange = (cont: string) => {
@@ -82,18 +78,17 @@ export const Form = ({ isUpdate }: FormProps) => {
     mutationFn: (formdata: BoardData) => {
       // null이 아닌 실제 File 객체만 추출
       const filterdFile = files
-        .map(item => item.file)
+        .map((item) => item.file)
         .filter((file): file is File => file !== null);
 
-        console.log(filterdFile.length);
-      
       return saveBoard(formdata, filterdFile);
     },
     onSuccess: (response) => {
       if (response.success) {
         alert("저장을 성공하였습니다.");
         //검색 조건 초기화
-        
+        resetSearch();
+        //목록으로 이동
         navigator("/board/list");
       } else {
         alert("저장을 실패했습니다.");
@@ -133,7 +128,7 @@ export const Form = ({ isUpdate }: FormProps) => {
       return;
     }
     //6.첨부파일 1개 이상
-    if(!files[0]?.file){
+    if (!files[0]?.file) {
       alert("파일은 1개 이상 선택해주세요!");
       return;
     }
@@ -220,7 +215,7 @@ export const Form = ({ isUpdate }: FormProps) => {
         <Link
           to="/board/list"
           className="btn btn-default"
-          onClick={handleCancel}
+          onClick={setBeforeSearch}
         >
           취소
         </Link>

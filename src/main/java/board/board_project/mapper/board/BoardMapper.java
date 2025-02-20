@@ -33,6 +33,9 @@ public interface BoardMapper {
     //전체 글 데이터 GET
     List<BoardListDTO> getBoardList(SearchBoardDTO searchBoardDTO);
 
+    //파일 갯수 GET
+    int getFileCnt(int board_no);
+
     //총 데이터 갯수 GET
     int getTotalListAmount(SearchBoardDTO searchBoardDTO);
 

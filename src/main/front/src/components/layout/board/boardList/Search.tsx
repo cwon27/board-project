@@ -1,6 +1,29 @@
+import { Link } from "react-router-dom";
 import { Category } from "../Category";
+import { useSearch } from "../../../../hooks/useSearch";
 
-export const Search = () => {
+interface SearchProps {
+  onSearch: ()=>void;
+}
+
+export const Search = ({onSearch}:SearchProps) => {
+  //검색조건 변경시 search 상태 변경
+  const { search, updateSearchType, updateSearchKeyword } = useSearch();
+
+  //검색 타입 선택
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const searchType = e.target.value;
+
+    updateSearchType(searchType);
+  };
+
+  //검색 키워드 입력
+  const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchKeyword = e.target.value;
+
+    updateSearchKeyword(searchKeyword);
+  };
+
   return (
     <>
       <div className="hide-dv mt10">
@@ -13,7 +36,7 @@ export const Search = () => {
             <tr>
               <th>카테고리</th>
               <td>
-                <Category/>
+                <Category />
               </td>
             </tr>
             <tr>
@@ -22,14 +45,21 @@ export const Search = () => {
                 <select
                   className="select"
                   style={{ width: "150px", marginRight: "5px" }}
+                  onChange={handleSelectChange}
+                  value={search.searchType}
                 >
-                  <option>전체</option>
-                  <option>-</option>
+                  <option value={"all"}>전체</option>
+                  <option value={"title"}>제목</option>
+                  <option value={"cont"}>내용</option>
+                  <option value={"titleCont"}>제목+내용</option>
+                  <option value={"writer"}>작성자명</option>
                 </select>
                 <input
                   type="text"
                   className="input"
                   style={{ width: "300px" }}
+                  onChange={handleKeywordChange}
+                  value={search.searchKeyword}
                 />
               </td>
             </tr>
@@ -37,22 +67,9 @@ export const Search = () => {
         </table>
       </div>
       <div className="btn-box btm l">
-        <a href="#" className="btn btn-red fr">
+        <Link to="#" className="btn btn-red fr" onClick={onSearch}>
           검색
-        </a>
-      </div>
-
-      <div className="tbl-hd noBrd mb0">
-        <span className="total">
-          검색 결과 : <strong>234</strong> 건
-        </span>
-        <div className="right">
-          <span className="spanTitle">정렬 순서 :</span>
-          <select className="select" style={{ width: "120px" }}>
-            <option>최근 작성일</option>
-            <option>조회수</option>
-          </select>
-        </div>
+        </Link>
       </div>
     </>
   );

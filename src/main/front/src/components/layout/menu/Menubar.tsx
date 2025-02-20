@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useSearch } from "../../../hooks/useSearch";
 
 export const Menubar = () => {
+  const { resetSearch } = useSearch();
   return (
     <div className="lm">
       <h2 className="h2-tit">
@@ -8,7 +10,7 @@ export const Menubar = () => {
       </h2>
       <ul className="snb">
         <li className="snb1 active">
-          <Link to="/board/list">통합게시판</Link>
+          <Link to="/board/list" onClick={resetSearch}>통합게시판</Link>
         </li>
       </ul>
     </div>

@@ -118,7 +118,7 @@ public class BoardController {
     }
 
     //전체 리스트 Read api
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<Map<String, Object>> getBoardList(@RequestBody SearchBoardDTO searchBoardDTO) {
         //총 데이터 갯수(검색조건 포함)
         int totalListAmount = boardService.getTotalListAmount(searchBoardDTO);
@@ -126,6 +126,12 @@ public class BoardController {
         List<BoardListDTO> boardList = (totalListAmount > 0)
                 ? boardService.getBoardList(searchBoardDTO)
                 : Collections.emptyList();
+
+        //isNew 검사
+        boardList = boardService.isNewCheck(boardList);
+
+        //파일 갯수 여부
+        boardList = boardService.isFileCheck(boardList);
 
 
         Map<String, Object> response = new HashMap<>();

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Slf4j
@@ -116,7 +118,33 @@ public class BoardService {
     //전체 글 데이터 GET
     public List<BoardListDTO> getBoardList(SearchBoardDTO searchBoardDTO) {
         searchBoardDTO.calculateOffset();
+
         return boardMapper.getBoardList(searchBoardDTO);
+    }
+
+    //날짜 계산해서 isNew 체크
+    public List<BoardListDTO> isNewCheck(List<BoardListDTO> boardList) {
+        //오늘 날짜
+        LocalDate today = LocalDate.now();
+
+        //비교
+        boardList.forEach(board -> {
+            long dayDifference = Math.abs(ChronoUnit.DAYS.between(LocalDate.parse(board.getReg_dt()), today));
+            board.set_new(dayDifference < 4);
+        });
+
+        return boardList;
+    }
+
+    //파일 존재하는지 체크
+    public List<BoardListDTO> isFileCheck(List<BoardListDTO> boardList){
+        boardList.forEach(board->{
+            //파일 갯수 받아오기
+            int fileCnt = boardMapper.getFileCnt(board.getBoard_no());
+            board.set_file(fileCnt>0);
+        });
+
+        return boardList;
     }
 
     //총 데이터 갯수 GET

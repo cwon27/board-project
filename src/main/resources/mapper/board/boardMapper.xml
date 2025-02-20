@@ -134,6 +134,15 @@
         LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
+    <!-- 파일 갯수 GET -->
+    <select id="getFileCnt">
+        SELECT COUNT(f.file_no)
+        FROM bt_tb_board b
+        JOIN bt_tb_file f
+        ON b.board_no = f.ref_pk
+        WHERE b.board_no = #{board_no}
+    </select>
+
     <!-- 총 데이터 갯수 GET -->
     <select id="getTotalListAmount" parameterType="board.board_project.dto.request.board.SearchBoardDTO" resultType="int">
         SELECT COUNT(board_no)

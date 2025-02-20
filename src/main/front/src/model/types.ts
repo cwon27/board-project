@@ -6,6 +6,8 @@ export interface BoardList {
   writer_nm: string;
   view_cnt: number;
   reg_dt: string;
+  _new : boolean;
+  _file : boolean;
 }
 
 //검색 조건
@@ -16,7 +18,7 @@ export interface CategoryData {
 }
 
 export interface SearchData {
-  searchCategoryType: CategoryData["comm_cd"];
+  searchCategoryType: CategoryData;
   searchType: string;
   searchKeyword: string;
   sortType: string;
