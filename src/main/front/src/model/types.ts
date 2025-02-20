@@ -8,10 +8,20 @@ export interface BoardList {
   reg_dt: string;
 }
 
-//Category값
+//검색 조건
+//Category
 export interface CategoryData {
   comm_cd: string;
   comm_cd_nm: string;
+}
+
+export interface SearchData {
+  searchCategoryType: CategoryData["comm_cd"];
+  searchType: string;
+  searchKeyword: string;
+  sortType: string;
+  page: number;
+  pageSize: number;
 }
 
 //글 Creaete, Update시 필요한 데이터

@@ -5,18 +5,24 @@ import board.board_project.dto.request.board.SearchBoardDTO;
 import board.board_project.dto.request.board.UpdateBoardDTO;
 import board.board_project.dto.response.board.BoardDetailDTO;
 import board.board_project.dto.response.board.BoardListDTO;
-import board.board_project.dto.response.common.CategoryDTO;
 import board.board_project.mapper.board.BoardMapper;
+import board.board_project.service.file.FileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class BoardService {
     private final BoardMapper boardMapper;
+    private final FileService fileService;
 
-    public BoardService(BoardMapper boardMapper) {
+    public BoardService(BoardMapper boardMapper, FileService fileService) {
         this.boardMapper = boardMapper;
+        this.fileService = fileService;
     }
 
     //글 등록시 유효성 검사
@@ -59,11 +65,28 @@ public class BoardService {
         }
     }
 
-    //글 등록
-    public int saveBoard(SaveBoardDTO saveBoardDTO) {
-        boardMapper.saveBoard(saveBoardDTO);
-        return saveBoardDTO.getBoard_no();
+    //글 & 파일 저장
+    @Transactional
+    public void saveBoardAndFiles(SaveBoardDTO saveBoardDTO, List<MultipartFile> fileItems) {
+        //글 등록
+        int result = boardMapper.saveBoard(saveBoardDTO);
+
+        int board_no = saveBoardDTO.getBoard_no();
+        log.info("*****BoardServie board_no : {}", board_no);
+
+        if (result <= 0) {
+            throw new RuntimeException("게시물 등록 실패");
+        }
+
+
+        try {
+            //파일 등록
+            fileService.saveFiles(fileItems, board_no);
+        } catch (Exception e) {
+            throw new RuntimeException("파일 등록 실패", e);
+        }
     }
+
 
     //글 상세 데이터 GET
     public BoardDetailDTO getBoardDetail(int board_no) {

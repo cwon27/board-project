@@ -19,7 +19,7 @@ export const saveBoard = async (formdata: BoardData, fileItems: File[]) => {
     saveData.append("fileItems", file);
   });
 
-  saveData.append("formData", JSON.stringify(formdata));
+  saveData.append("formData", new Blob([JSON.stringify(formdata)], { type: "application/json" }));
 
   const response = await apiUrl.post("/board/save", saveData, {
     headers: {

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board.board_project.mapper.file.FileMapper">
+    <insert id="saveFile" parameterType="board.board_project.dto.request.file.SaveFileDTO">
+        INSERT INTO bt_tb_file(
+                origin_file_nm,
+                save_file_nm,
+                save_path,
+                ext,
+                size,
+                ref_tbl,
+                ref_pk,
+                download_cnt,
+                ord,
+                reg_dt
+        )
+        VALUES(
+                #{origin_file_nm},
+                #{save_file_nm},
+                #{save_path},
+                #{ext},
+                #{size},
+                "bt_tb_board",
+                #{ref_pk},
+                0,
+                #{ord},
+                now()
+        )
+    </insert>
+</mapper>

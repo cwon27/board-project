@@ -8,6 +8,7 @@ import board.board_project.dto.response.board.BoardDetailDTO;
 import board.board_project.dto.response.board.BoardListDTO;
 import board.board_project.service.board.BoardService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -33,29 +34,31 @@ public class BoardController {
 
     //글 등록(Create) api
     @PostMapping("/save")
-    public ResponseEntity<Map<String, Object>> saveBoard(MultipartHttpServletRequest request) {
-        SaveBoardDTO saveBoardDTO = objectMapper.readValue(request.getParameter("formData"), SaveBoardDTO.class);
-        List<MultipartFile> fileItems = request.getFiles("fileItems");
-
+    public ResponseEntity<Map<String, Object>> saveBoard(@RequestPart("formData") SaveBoardDTO saveBoardDTO,
+                                                         @RequestPart("fileItems") List<MultipartFile> fileItems) {
         //받아온 데이터 한번 더 유효성 검사
         boardService.checkData(saveBoardDTO);
 
         //비번 암호화
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
 
-        int board_no = boardService.saveBoard(saveBoardDTO);
-
         Map<String, Object> response = new HashMap<>();
-        if (board_no > 0) {
-            //저장 성공
-            response.put("success", true);
-            log.info("@@@@@@@@@fileItems : {}",fileItems );
 
-        } else {
-            response.put("success", false);
+        try {
+            //파일이 있는 경우에만 처리
+            if(fileItems != null && !fileItems.isEmpty()){
+                boardService.saveBoardAndFiles(saveBoardDTO,fileItems);
+
+                response.put("success",true);
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("success",false);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        }catch (Exception e){
+            response.put("success",false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        return ResponseEntity.ok(response);
     }
 
     //비밀번호 확인 api
