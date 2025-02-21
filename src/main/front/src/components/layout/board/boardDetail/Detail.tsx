@@ -1,6 +1,47 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  downloadFile,
+  downloadincrement,
+  getBoardDetail,
+  getFileData,
+  viewCount,
+} from "../../../../apis/service";
+import { FileData } from "../../../../model/types";
 
-export const Detail = () => {
+interface DetailProps {
+  board_no: string;
+  boardNo: number;
+}
+
+export const Detail = ({ board_no, boardNo }: DetailProps) => {
+  //상세정보 데이터 가져오기
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["detailData", boardNo],
+    queryFn: async () => {
+      const boardDetail = await getBoardDetail(boardNo);
+      const viewCnt = await viewCount(boardNo);
+      const fileData = await getFileData(boardNo);
+      return { boardDetail, viewCnt, fileData };
+    },
+    enabled: !!board_no,
+  });
+
+  if (isLoading) return <p>로딩중....</p>;
+  if (error) return <p>리스트 값 가져오는데 에러남</p>;
+
+  //파일 다운로드
+  const handleDownload = async (file_no: number) => {
+    try {
+      const result = await downloadFile(file_no);
+      if (result == 1) {
+        await downloadincrement(file_no);
+      }
+    } catch (error) {
+      console.error("파일 다운로드 중 오류 발생:", error);
+    }
+  };
+
   return (
     <table className="write">
       <colgroup>
@@ -12,64 +53,42 @@ export const Detail = () => {
       <tbody>
         <tr>
           <th className="fir">작성자</th>
-          <td>관리자</td>
+          <td>{data?.boardDetail.writer_nm}</td>
           <th className="fir">작성일시</th>
-          <td>2022-07-07 14:02:37</td>
+          <td>{data?.boardDetail.reg_dt}</td>
         </tr>
         <tr>
           <th className="fir">카테고리</th>
-          <td colSpan={3}>일반</td>
+          <td colSpan={3}>{data?.boardDetail.comm_cd_nm}</td>
         </tr>
         <tr>
           <th className="fir">제목</th>
-          <td colSpan={3}>네이버-카카오, 지난해 IT에 얼마나 투자했나?</td>
+          <td colSpan={3}>{data?.boardDetail.title}</td>
         </tr>
         <tr>
           <th className="fir">내용</th>
           <td colSpan={3}>
-            [디지털데일리 최민지기자] 국내 대표 플랫폼 네이버와 카카오는 지난해
-            정보기술(IT) 및 정보보호에 얼마나 많은 투자를 집행했을까?
-            <br />
-            5일 정보보호 공시 포털에 따르면 네이버는 지난해 IT부문에
-            9252억9100만원을 투입했다. 플랫폼 기업 중 가장 큰 규모다. IT 기업인
-            만큼, 정보기술 투자 비율이 높다는 설명이다.
-            <br />
-            네이버는 “IT부문과 관련해 기획·개발·운영·유지·보수를 수행하는 내부
-            인력 확충 등으로 투자를 확대했다”며 “정보처리 시스템 구입, 유지보수
-            등에 대한 투자도 크게 늘었다”고 말했다.
-            <br />
-            정보보호 투자액은 350억4300만원으로, IT투자액 3.8%를 차지한다.
-            네이버는 데브섹옵스 지원 시스템, 서비스관리도구 통합 권한관리시스템,
-            암호관리시스템 등 자체 보안 시스템을 개발 운영에도 투자하고 있다.
-            이러한 자체 개발 시스템 비용은 공시에 포함되지 않았다.
-            <br />
-            네이버 총 임직원 수는 4319명이며, IT부문 인력은 3069명이다. 10명 중
-            7명 이상이 IT 인력인 셈이다. 정보보호 전담인력은 내부인력 47명,
-            외주인력 60명 총 107명이다. 정보보호 전담 직원 수는 IT부문 인력
-            3.5%에 해당된다.
-            <br />
-            이와 관련 네이버는 “최근 대규모 개발자 채용, 내부 개발한 보안 시스템
-            활용이 높은 이유로 인해, IT부문 투자(인력) 대비 정보보호부문
-            투자(인력) 비율이 낮아보일 수 있다”고 부연했다.
-            <br />
-            이어 “네이버는 인력 확대, 장비 이용료, 통신회선비용 등에 투자를
-            확대하고 있다. 이사회 산하 리스크관리위원회를 통한 정보보호 리스크를
-            관리하고, 외부 인사로 구성된 개인정보보호위원회를 통한 연구 및
-            자문활동도 진행하고 있다”며 “2012년 국내 최초로 SOC2, 3를 동시
-            인증을 획득한 뒤 10년 이상 해당 인증을 갱신하며, 개인정보 관리 체계
-            및 내부 통제에 있어 글로벌 수준 경쟁력을 유지하고 있다”고 덧붙였다
+            <div dangerouslySetInnerHTML={{ __html: data?.boardDetail.cont }} />
           </td>
         </tr>
         <tr>
           <th className="fir">첨부파일</th>
           <td colSpan={3}>
-            <span>
-              <Link to="#">상담내역1.xlsx</Link>
-            </span>
-            <br />
-            <span>
-              <Link to="#">상담내역2.xlsx</Link>
-            </span>
+            {data?.fileData.map((file: FileData) => {
+              return (
+                <React.Fragment key={file.file_no}>
+                  <span>
+                    <button
+                      className="ic-file2 fileBtn"
+                      onClick={() => handleDownload(file.file_no)}
+                    >
+                      {file.origin_file_nm}
+                    </button>
+                  </span>
+                  <br />
+                </React.Fragment>
+              );
+            })}
           </td>
         </tr>
       </tbody>

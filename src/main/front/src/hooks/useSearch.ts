@@ -55,6 +55,7 @@ export const useSearch = () => {
   const updateSortType = (sortType: string) => {
     setSearch((prev) => ({
       ...prev,
+      page:1,
       sortType: sortType,
     }));
   };
@@ -71,6 +72,7 @@ export const useSearch = () => {
   const updatePageSize = (pageSize: number) => {
     setSearch((prev) => ({
       ...prev,
+      page:1,
       pageSize: pageSize,
     }));
   };

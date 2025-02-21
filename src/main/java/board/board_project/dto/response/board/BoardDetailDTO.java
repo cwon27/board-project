@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BoardDetailDTO {
     private int board_no; //게시물 번호
-    private String category_cd; //카테고리 코드
+    private String comm_cd_nm; //카테고리 코드
     private String title; //제목
     private String cont; //내용
     private String writer_nm; //작성자명
     private String reg_dt; //작성일
+    private String category_cd;
 }

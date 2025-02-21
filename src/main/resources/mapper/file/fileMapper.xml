@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="board.board_project.mapper.file.FileMapper">
+<!--    파일 Create-->
     <insert id="saveFile" parameterType="board.board_project.dto.request.file.SaveFileDTO">
         INSERT INTO bt_tb_file(
                 origin_file_nm,
@@ -29,4 +30,37 @@
                 now()
         )
     </insert>
+
+<!--    파일 데이터 GET-->
+    <select id="getFileData" resultType="board.board_project.dto.response.file.FileDataDTO">
+        SELECT f.file_no,
+               f.origin_file_nm,
+               f.ord,
+               f.save_path
+        FROM bt_tb_file f
+        JOIN bt_tb_board b
+        ON f.ref_pk = b.board_no
+        WHERE b.board_no = #{board_no}
+    </select>
+
+<!--    다운로드 파일 데이터-->
+    <select id="getDownloadFile" resultType="board.board_project.dto.request.file.DownloadFileDTO">
+        SELECT save_path,
+               origin_file_nm
+        FROM bt_tb_file
+        WHERE file_no = #{file_no}
+    </select>
+
+<!--    파일 다운로드수 증가-->
+    <update id="downloadFileCnt" parameterType="int">
+        UPDATE bt_tb_file
+        SET download_cnt = download_cnt + 1
+        WHERE file_no = #{file_no}
+    </update>
+
+<!--    파일 삭제-->
+    <delete id="deleteFile">
+        DELETE FROM bt_tb_file
+        WHERE save_path = #{filePath}
+    </delete>
 </mapper>

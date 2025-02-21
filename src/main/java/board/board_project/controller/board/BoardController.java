@@ -1,6 +1,5 @@
 package board.board_project.controller.board;
 
-import board.board_project.dto.request.board.CheckPwDTO;
 import board.board_project.dto.request.board.SaveBoardDTO;
 import board.board_project.dto.request.board.SearchBoardDTO;
 import board.board_project.dto.request.board.UpdateBoardDTO;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +38,7 @@ public class BoardController {
         boardService.checkData(saveBoardDTO);
 
         //비번 암호화
+        log.info("before : {}",saveBoardDTO.getPassword());
         saveBoardDTO.setPassword(encoder.encode(saveBoardDTO.getPassword()));
 
         Map<String, Object> response = new HashMap<>();
@@ -62,20 +61,21 @@ public class BoardController {
     }
 
     //비밀번호 확인 api
-    @GetMapping("/checkPassword")
-    public ResponseEntity<Map<String, Object>> checkPassword(@RequestBody CheckPwDTO checkPwDTO) {
+    @PostMapping("/checkPassword/{boardNo}")
+    public ResponseEntity<Map<String, Object>> checkPassword(@PathVariable("boardNo") int boardNo,
+                                                             @RequestBody String password) {
+        log.info(password);
+
         //암호화된 비번 가져오기
-        String encodePw = boardService.getBoardPw(checkPwDTO.getBoard_no());
+        String encodePw = boardService.getBoardPw(boardNo);
 
         Map<String, Object> response = new HashMap<>();
 
         //비번 비교
-        if (encodePw != null && encoder.matches(checkPwDTO.getPassword(), encodePw)) {
+        if (encodePw != null && encoder.matches(password, encodePw)) {
             response.put("success", true);
-            response.put("message", "비밀번호 일치");
         } else {
             response.put("success", false);
-            response.put("message", "비밀번호 불일치");
         }
 
         return ResponseEntity.ok(response);
@@ -83,38 +83,36 @@ public class BoardController {
 
     //글 수정(Update) api
     @PutMapping("/update")
-    public ResponseEntity<Map<String, String>> updateBoard(@RequestBody UpdateBoardDTO updateBoardDTO) {
+    public ResponseEntity<Map<String, Object>> updateBoard(@RequestBody UpdateBoardDTO updateBoardDTO) {
         int result = boardService.updateBoard(updateBoardDTO);
 
-        Map<String, String> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         if (result > 0) {
             //수정 성공
-            response.put("message", "게시글 수정 성공");
-            //상세페이지로 이동
-            response.put("redirectUrl", "http://localhost:5173/boardDetail/" + updateBoardDTO.getBoard_no());
+            response.put("success", true);
         } else {
-            response.put("message", "게시글 수정 실패");
+            response.put("success", false);
         }
 
         return ResponseEntity.ok(response);
     }
 
     //글 삭제(Delete) api
-    @DeleteMapping("/delete/{board_no}")
-    public ResponseEntity<Map<String, String>> deleteBoard(@PathVariable("board_no") int board_no) {
-        int result = boardService.deleteBoard(board_no);
+    @DeleteMapping("/delete/{boardNo}")
+    public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable("boardNo") int boardNo) {
+        Map<String, Object> response = new HashMap<>();
 
-        Map<String, String> response = new HashMap<>();
-        if (result > 0) {
-            //삭제 성공
-            response.put("message", "게시글 삭제 성공");
-            //목록페이지로 이동
-            response.put("redirectUrl", "http://localhost:5173");
-        } else {
-            response.put("message", "게시글 삭제 실패");
+        log.info("*************boardNO : {}",boardNo);//잘 옴
+
+        try {
+            boardService.deleteBoard(boardNo);
+
+            response.put("success",true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success",false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
-        return ResponseEntity.ok(response);
     }
 
     //전체 리스트 Read api
@@ -133,10 +131,13 @@ public class BoardController {
         //파일 갯수 여부
         boardList = boardService.isFileCheck(boardList);
 
+        //전체 페이지 수
+        int totalPages = (int) Math.ceil((double) totalListAmount/ searchBoardDTO.getPageSize());
 
         Map<String, Object> response = new HashMap<>();
         response.put("boardList", boardList);
         response.put("totalListAmount", totalListAmount);
+        response.put("totalPages",totalPages);
 
         return ResponseEntity.ok(response);
     }

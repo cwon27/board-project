@@ -3,17 +3,17 @@ import { useSearch } from "../../../../hooks/useSearch";
 import { BoardList } from "../../../../model/types";
 
 interface ListProps {
-  listData:{
-    boardList : BoardList[];
-    totalListAmount:number;
+  listData: {
+    boardList: BoardList[];
+    totalListAmount: number;
   };
 }
 
-export const List = ({listData}:ListProps) => {
+export const List = ({ listData }: ListProps) => {
   //정렬조건 변경시 search 상태 변경
   const { search, updateSortType } = useSearch();
 
-  //정렬 타입 선택 
+  //정렬 타입 선택
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const sortType = e.target.value;
 
@@ -61,28 +61,34 @@ export const List = ({listData}:ListProps) => {
           </tr>
         </thead>
         <tbody>
-          {listData.boardList && listData.boardList.map((board)=>{
-             return (
-            <tr key={board.board_no}>
-            <td>{board.board_no}</td>
-            <td>{board.category_cd}</td>
-            <td className="l">
-              <Link to={`/board/detail/${board.board_no}`}>
-              {board.title}
-                {board._new && <img src="/src/images/new.gif" className="new" />}
-              </Link>
-            </td>
-            <td>
-            {board._file && (
-                  <Link to={`/board/detail/${board.board_no}`} className="ic-file">파일</Link>
-                )}
-            </td>
-            <td>{board.writer_nm}</td>
-            <td>{board.view_cnt}</td>
-            <td>{board.reg_dt}</td>
-          </tr>
-          );
-          })}
+          {listData.boardList &&
+            listData.boardList.map((board) => {
+              return (
+                <tr key={board.board_no}>
+                  <td>{board.board_no}</td>
+                  <td>{board.comm_cd_nm}</td>
+                  <td className="l">
+                    <Link to={`/board/detail/${board.board_no}`}>
+                      {board.title}
+                      {board._new && (
+                        <img src="/src/images/new.gif" className="new" />
+                      )}
+                    </Link>
+                  </td>
+                  <td>
+                    {board._file && (
+                      <Link
+                        to={`/board/detail/${board.board_no}`}
+                        className="ic-file"
+                      ></Link>
+                    )}
+                  </td>
+                  <td>{board.writer_nm}</td>
+                  <td>{board.view_cnt}</td>
+                  <td>{board.reg_dt}</td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </>

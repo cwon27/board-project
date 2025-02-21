@@ -3,6 +3,7 @@ import { getCategoryData } from "../../../apis/service";
 import { CategoryData } from "../../../model/types";
 import { useSearch } from "../../../hooks/useSearch";
 
+
 export const Category = () => {
   //recoil 카테고리 상태
   const { search, updateCategory } = useSearch();

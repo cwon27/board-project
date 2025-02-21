@@ -88,8 +88,7 @@ public class BoardService {
             throw new RuntimeException("파일 등록 실패", e);
         }
     }
-
-
+    
     //글 상세 데이터 GET
     public BoardDetailDTO getBoardDetail(int board_no) {
         BoardDetailDTO boardDetailData = boardMapper.getBoardDetail(board_no);
@@ -111,8 +110,28 @@ public class BoardService {
     }
 
     //글 삭제
-    public int deleteBoard(int board_no) {
-        return boardMapper.deleteBoard(board_no);
+    @Transactional
+    public void deleteBoard(int board_no) {
+        log.info("삭제 요청: board_no = {}", board_no);
+
+        try {
+            //파일 삭제
+            log.info("파일 삭제 진행: board_no = {}", board_no);
+            fileService.deleteFileAll(board_no);
+
+            //글 삭제
+            int result = boardMapper.deleteBoard(board_no);
+
+            if (result <= 0) {
+                log.error("게시물 삭제 실패: board_no = {}", board_no);
+                throw new RuntimeException("게시물 삭제 실패");
+            }
+
+        } catch (Exception e) {
+            log.error("파일 삭제 중 오류 발생: board_no = {}, error = {}", board_no, e.getMessage());
+
+            throw new RuntimeException("파일 삭제 실패", e);
+        }
     }
 
     //전체 글 데이터 GET

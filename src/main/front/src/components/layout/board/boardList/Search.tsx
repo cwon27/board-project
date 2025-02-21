@@ -60,6 +60,11 @@ export const Search = ({onSearch}:SearchProps) => {
                   style={{ width: "300px" }}
                   onChange={handleKeywordChange}
                   value={search.searchKeyword}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      onSearch();
+                    }
+                  }}
                 />
               </td>
             </tr>

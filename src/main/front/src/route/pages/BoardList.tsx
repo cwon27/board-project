@@ -18,7 +18,7 @@ export const BoardList = () => {
 
   //검색 조건으로 list 가져오기
   const { data, isLoading, error } = useQuery({
-    queryKey: ["boardList", search.sortType, search.pageSize], //쿼리 고유 식별자 search가 변경될때마다 실행
+    queryKey: ["boardList", search.sortType, search.pageSize, search.page], //쿼리 고유 식별자 search가 변경될때마다 실행
     queryFn: () => getBoard(search), //데이터 가져오기 작업 수행함 -> apis/service.ts에 있다.
   });
 
@@ -38,7 +38,7 @@ export const BoardList = () => {
     <>
       <Search onSearch={handleChange}/>
       <List listData = {data}/>
-      <Pagination />
+      <Pagination totalPages={data?.totalPages || 1}/>
       <div className="btn-box l mt30">
         <Link to="/board/write" className="btn btn-green fr">
           등록

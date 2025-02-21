@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Category } from "../Category";
 import { ToastEditor } from "./ToastEditor";
-import { BoardData, FileItem } from "../../../../model/types";
+import { BoardData, BoardDetail, FileData, FileItem } from "../../../../model/types";
 import { useMutation } from "@tanstack/react-query";
-import { saveBoard } from "../../../../apis/service";
+import { saveBoard, updateBoard } from "../../../../apis/service";
 import { FileInput } from "./FileInput";
 import { useSearch } from "../../../../hooks/useSearch";
 
 interface FormProps {
   //통해서 등록인지 수정인지 구분
   isUpdate: boolean;
+  initialData?: {
+    boardDetail:BoardDetail,
+    fileData : FileData
+  }
 }
 
-export const Form = ({ isUpdate }: FormProps) => {
-  const { search, setSearch, resetSearch,setBeforeSearch } = useSearch();
+export const Form = ({ isUpdate, initialData }: FormProps) => {
+  const { search, setSearch, resetSearch, setBeforeSearch } = useSearch();
 
   //글등록인 경우 카테고리 전체로 초기화
   useEffect(() => {
@@ -29,16 +33,28 @@ export const Form = ({ isUpdate }: FormProps) => {
     }
   }, [isUpdate, setSearch]);
 
-
   //** 글 등록
   //데이터 상태 관리
   const [formData, setFormData] = useState<BoardData>({
-    category_cd: "ALL",
-    title: "",
-    cont: "",
-    writer_nm: "",
+    category_cd: initialData?.boardDetail.category_cd || "ALL",
+    title: initialData?.boardDetail.title || "",
+    cont: initialData?.boardDetail.cont || "",
+    writer_nm: initialData?.boardDetail.writer_nm || "",
     password: "",
   });
+
+  //initialData가 변경될때마다 실행행
+  useEffect(() => {
+    if (isUpdate && initialData) {
+      setFormData({
+        category_cd: initialData.boardDetail.category_cd,
+        title: initialData.boardDetail.title,
+        cont: initialData.boardDetail.cont,
+        writer_nm: initialData.boardDetail.writer_nm,
+        password: "",
+      });
+    }
+  }, [isUpdate, initialData]);
 
   //데이터 변경 함수
   const handleDataChange = (
@@ -67,7 +83,7 @@ export const Form = ({ isUpdate }: FormProps) => {
   const navigator = useNavigate();
 
   //react-query useMutation 사용하여 api함수 호출
-  //파일값 상태 관리리
+  //파일값 상태 관리
   const [files, setFiles] = useState<FileItem[]>([]);
   const handleFileChange = (newFiles: FileItem[]) => {
     setFiles(newFiles);
@@ -75,23 +91,29 @@ export const Form = ({ isUpdate }: FormProps) => {
 
   //글, 파일 저장(트랜잭션 위해)
   const mutation = useMutation({
-    mutationFn: (formdata: BoardData) => {
+    mutationFn: async (formdata: BoardData) => {
       // null이 아닌 실제 File 객체만 추출
       const filterdFile = files
         .map((item) => item.file)
         .filter((file): file is File => file !== null);
 
-      return saveBoard(formdata, filterdFile);
+        if (isUpdate) {
+          if (!initialData?.boardDetail.board_no) {
+            throw new Error('게시글 번호가 없습니다.');
+          }
+          return updateBoard(initialData.boardDetail.board_no, formdata);
+        }
+        return saveBoard(formdata,filterdFile);
     },
     onSuccess: (response) => {
       if (response.success) {
-        alert("저장을 성공하였습니다.");
+        alert(isUpdate ? "수정되었습니다." : "저장되었습니다.");
         //검색 조건 초기화
         resetSearch();
         //목록으로 이동
         navigator("/board/list");
       } else {
-        alert("저장을 실패했습니다.");
+        alert(isUpdate ? "수정을 실패했습니다." : "저장을 실패했습니다.");
       }
     },
     onError: (error) => {
@@ -103,12 +125,12 @@ export const Form = ({ isUpdate }: FormProps) => {
   const handleSubmit = () => {
     //유효성 검사 추가
     //1. 작성자
-    if (!formData.writer_nm.trim() || formData.writer_nm.length > 50) {
+    if (!isUpdate && (!formData.writer_nm.trim() || formData.writer_nm.length > 50)) {
       alert("작성자를 다시 입력해주세요! (필수로 입력, 50자 이내)");
       return;
     }
     //2. 비밀번호
-    if (!formData.password.trim() || formData.password.length > 100) {
+    if (!isUpdate && (!formData.password.trim() || formData.password.length > 100)) {
       alert("비밀번호를 다시 입력해주세요! (필수로 입력, 100자 이내)");
       return;
     }
@@ -157,6 +179,7 @@ export const Form = ({ isUpdate }: FormProps) => {
                 name="writer_nm"
                 onChange={handleDataChange}
                 value={formData.writer_nm}
+                readOnly={isUpdate}
               />
             </td>
             <th className="fir">
@@ -168,7 +191,8 @@ export const Form = ({ isUpdate }: FormProps) => {
                 className="input block"
                 name="password"
                 onChange={handleDataChange}
-                value={formData.password}
+                value={isUpdate ? "*******" : formData.password}
+                readOnly={isUpdate}
               />
             </td>
           </tr>
@@ -177,7 +201,7 @@ export const Form = ({ isUpdate }: FormProps) => {
               카테고리 <i className="req">*</i>
             </th>
             <td colSpan={3}>
-              <Category />
+              <Category/>
             </td>
           </tr>
           <tr>
@@ -191,6 +215,7 @@ export const Form = ({ isUpdate }: FormProps) => {
                 style={{ width: "100%" }}
                 name="title"
                 onChange={handleDataChange}
+                value={formData.title}
               />
             </td>
           </tr>

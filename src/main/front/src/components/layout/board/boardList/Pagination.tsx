@@ -1,10 +1,16 @@
 import { useSearch } from "../../../../hooks/useSearch";
 
-export const Pagination = () => {
+interface PaginationProps {
+  totalPages: number;
+}
+
+export const Pagination = ({ totalPages }: PaginationProps) => {
   //사이즈 조건 변경시 search 상태 변경
   const { search, updatePage, updatePageSize } = useSearch();
+  //현재 페이지
+  const currentPage = search.page;
 
-  //사이즈 타입 선택 
+  //사이즈 타입 선택
   const handleSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const pageSize = parseInt(e.target.value);
 
@@ -12,37 +18,73 @@ export const Pagination = () => {
   };
 
   //페이지 선택
-  const handlePageChange = (page:number)=>{
-    updatePage(page);
-  }
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      updatePage(newPage);
+    }
+  };
 
   return (
     <div className="paginate_complex">
-      <a href="#" className="direction fir">
+      {/* 첫페이지로 이동 */}
+      <button
+        className={`direction fir ${currentPage == 1 ? "disabled" : ""}`}
+        onClick={() => handlePageChange(1)}
+        style={{ pointerEvents: currentPage === 1 ? "none" : "auto" }}
+      >
         처음
-      </a>
-      <a href="#" className="direction prev">
+      </button>
+
+      {/* 이전 페이지로 이동 */}
+      <button
+        className={`direction prev ${currentPage == 1 ? "disabled" : ""}`}
+        onClick={() => handlePageChange(currentPage - 1)}
+        style={{ pointerEvents: currentPage === 1 ? "none" : "auto" }}
+      >
         이전
-      </a>
-      <a href="#" onChange={()=>handlePageChange(1)}>1</a>
-      <a href="#">2</a>
-      <a href="#">3</a>
-      <a href="#">4</a>
-      <strong>5</strong>
-      <a href="#">6</a>
-      <a href="#">7</a>
-      <a href="#">8</a>
-      <a href="#">9</a>
-      <a href="#">10</a>
-      <a href="#" className="direction next">
+      </button>
+
+      {/* 페이지 목록 */}
+      {[...Array(totalPages)].map((_, i) => {
+        const pageNum = i + 1;
+        return pageNum == currentPage ? (
+          <strong key={pageNum}>{pageNum}</strong>
+        ) : (
+          <button key={pageNum} onClick={() => handlePageChange(pageNum)}>
+            {pageNum}
+          </button>
+        );
+      })}
+
+      {/* 다음 페이지로 이동 */}
+      <button
+        className={`direction next ${
+          currentPage == totalPages ? "disabled" : ""
+        }`}
+        onClick={() => handlePageChange(currentPage + 1)}
+        style={{ pointerEvents: currentPage === totalPages ? "none" : "auto" }}
+      >
         다음
-      </a>
-      <a href="#" className="direction last">
-        끝
-      </a>
+      </button>
+
+      {/* 끝 페이지로 이동 */}
+      <button
+        className={`direction last ${
+          currentPage == totalPages ? "disabled" : ""
+        }`}
+        onClick={() => handlePageChange(totalPages)}
+        style={{ pointerEvents: currentPage === totalPages ? "none" : "auto" }}
+      >
+        끝끝
+      </button>
+
       <div className="right">
-        <select className="select" style={{ width: "120px" }} onChange={handleSizeChange}
-            value={search.pageSize}>
+        <select
+          className="select"
+          style={{ width: "120px" }}
+          onChange={handleSizeChange}
+          value={search.pageSize}
+        >
           <option value={10}>10개씩보기</option>
           <option value={30}>30개씩보기</option>
           <option value={50}>50개씩보기</option>

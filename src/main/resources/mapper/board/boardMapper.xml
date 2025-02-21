@@ -31,14 +31,16 @@
 
     <!-- 글 상세 데이터 GET -->
     <select id="getBoardDetail" parameterType="int" resultType="board.board_project.dto.response.board.BoardDetailDTO">
-        SELECT board_no,
-               category_cd,
-               title,
-               cont,
-               writer_nm,
-               password,
-               reg_dt
-        FROM bt_tb_board
+        SELECT b.board_no,
+               c.comm_cd_nm,
+               b.title,
+               b.cont,
+               b.writer_nm,
+               b.reg_dt,
+               b.category_cd
+        FROM bt_tb_board b
+        JOIN bt_tb_comm_code c
+        ON b.category_cd = c.comm_cd
         WHERE board_no = #{board_no}
     </select>
 
@@ -110,25 +112,27 @@
 
     <!-- 전체 글 데이터 GET -->
     <select id="getBoardList" parameterType="board.board_project.dto.request.board.SearchBoardDTO" resultType="board.board_project.dto.response.board.BoardListDTO">
-        SELECT board_no,
-               category_cd,
-               title,
-               writer_nm,
-               view_cnt,
-               DATE_FORMAT(reg_dt, '%Y-%m-%d') AS reg_dt
-        FROM bt_tb_board
+        SELECT b.board_no,
+               c.comm_cd_nm,
+               b.title,
+               b.writer_nm,
+               b.view_cnt,
+               DATE_FORMAT(b.reg_dt, '%Y-%m-%d') AS reg_dt
+        FROM bt_tb_board b
+        JOIN bt_tb_comm_code c
+        ON b.category_cd = c.comm_cd
         <include refid="searchBoardList"/>
         ORDER BY
         <!-- 정렬 타입별 list-->
         <choose>
             <when test="sortType == 'latest'">
-                board_no DESC
+                b.board_no DESC
             </when>
             <when test="sortType == 'hit'">
-                view_cnt DESC
+                b.view_cnt DESC
             </when>
             <otherwise>
-                board_no DESC
+                b.board_no DESC
             </otherwise>
         </choose>
         LIMIT #{pageSize} OFFSET #{offset}

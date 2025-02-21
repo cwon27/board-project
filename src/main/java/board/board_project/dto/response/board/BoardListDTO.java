@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class BoardListDTO {
     private int board_no; //게시물 번호
-    private String category_cd; //카테고리 코드
+    private String comm_cd_nm; //카테고리
     private String title; //제목
     private String writer_nm; //작성자명
     private int view_cnt; //조회수

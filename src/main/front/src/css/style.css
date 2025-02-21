@@ -210,6 +210,16 @@ dfn {
   font-style: normal;
 }
 
+em {
+  font-style: italic;
+}
+
+blockquote {
+  padding: 10px;
+  margin: 0 0 20px 0;
+  border-left: 5px solid #ccc;
+}
+
 .blind,
 legend {
   position: absolute;
@@ -315,10 +325,6 @@ input.block {
 }
 input.red {
   border-color: #fb546e;
-}
-input.readonly {
-  border-color: #c2c4ca;
-  background-color: #eeeeee;
 }
 
 a.bt-calendar,
@@ -1720,14 +1726,14 @@ table.list.line tbody td {
   border-left: #e1e2e6 1px solid;
   padding: 8px;
 }
-table.list .ic-file {
+.ic-file {
   width: 22px;
   height: 22px;
   display: inline-block;
   background: url("../images/sp_img.png") -107px -64px no-repeat;
   vertical-align: middle;
-  text-indent: -9999px;
 }
+
 table.list tbody tr.selected {
   background-color: #fff4df;
 }
@@ -1920,7 +1926,7 @@ table.view .ic-del {
   line-height: normal;
   text-align: center;
 }
-.paginate_complex a,
+.paginate_complex button,
 .paginate_complex strong {
   display: inline-block;
   position: relative;
@@ -1935,10 +1941,11 @@ table.view .ic-del {
   color: #333;
   text-decoration: none;
   vertical-align: top;
+  cursor: pointer;
 }
-.paginate_complex a:hover,
-.paginate_complex a:active,
-.paginate_complex a:focus {
+.paginate_complex button:hover,
+.paginate_complex button:active,
+.paginate_complex button:focus {
   border: #7c808b 1px solid;
   background-color: #7c808b;
   color: #fff;
@@ -1963,6 +1970,10 @@ table.view .ic-del {
 .paginate_complex .direction:active,
 .paginate_complex .direction:focus {
   background-color: #fff;
+}
+
+.paginate_complex .disabled{
+  display: none;
 }
 .paginate_complex .fir {
   background-image: url(../images/paging_fir.gif);
@@ -3065,4 +3076,16 @@ img.new {
 
 .file-style{
   height: 58px;
+}
+
+.fileBtn{
+  border: 0;
+  background: #fff;
+  cursor: pointer;
+  margin: 5px 0;
+}
+
+input.readonly {
+  border: none !important;
+  background-color: #eeeeee;
 }

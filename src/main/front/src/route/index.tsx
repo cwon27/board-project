@@ -22,7 +22,7 @@ const routes = [
       },
       {
         // 게시판 글 상세
-        path: "/board/detail/:id",
+        path: "/board/detail/:board_no",
         element: <BoardDetail />,
       },
       {
@@ -32,14 +32,19 @@ const routes = [
       },
       {
         // 게시판 글 수정
-        path: "/board/update/:id",
+        path: "/board/update/:board_no",
         element: <BoardForm isUpdate={true}/>,
       },
     ],
   },
   {
-    // 비밀번호 확인인
-    path: "/board/pwCheck",
+    // 비밀번호 확인(수정)
+    path: "/board/pwCheck/:board_no",
+    element: <PwCheck />,
+  },
+  {
+    // 비밀번호 확인(삭제)
+    path: "/board/pwCheck/:board_no",
     element: <PwCheck />,
   },
 ];
