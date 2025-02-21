@@ -12,7 +12,7 @@ export const BoardDetail = () => {
 
   return (
       <>
-        <Detail board_no={board_no} boardNo={boardNo}/>
+        <Detail boardNo={boardNo}/>
         <DetailBtn board_no={boardNo}/>
       </>
   );

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -55,9 +57,12 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
+        String encodedFileName = URLEncoder.encode(fileData.getOrigin_file_nm(), StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20");
+
         //파일 응답 반환
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileData.getOrigin_file_nm() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedFileName + "\"")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }

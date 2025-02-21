@@ -1,46 +1,18 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import {
-  downloadFile,
-  downloadincrement,
-  getBoardDetail,
-  getFileData,
-  viewCount,
-} from "../../../../apis/service";
 import { FileData } from "../../../../model/types";
+import { useBoardDetail } from "../../../../hooks/useQuery";
+import { handleDownload } from "../../../../utils/boardUtil";
 
 interface DetailProps {
-  board_no: string;
   boardNo: number;
 }
 
-export const Detail = ({ board_no, boardNo }: DetailProps) => {
+export const Detail = ({ boardNo }: DetailProps) => {
   //상세정보 데이터 가져오기
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["detailData", boardNo],
-    queryFn: async () => {
-      const boardDetail = await getBoardDetail(boardNo);
-      const viewCnt = await viewCount(boardNo);
-      const fileData = await getFileData(boardNo);
-      return { boardDetail, viewCnt, fileData };
-    },
-    enabled: !!board_no,
-  });
+  const { data, isLoading, error } = useBoardDetail(boardNo);
 
   if (isLoading) return <p>로딩중....</p>;
-  if (error) return <p>리스트 값 가져오는데 에러남</p>;
-
-  //파일 다운로드
-  const handleDownload = async (file_no: number) => {
-    try {
-      const result = await downloadFile(file_no);
-      if (result == 1) {
-        await downloadincrement(file_no);
-      }
-    } catch (error) {
-      console.error("파일 다운로드 중 오류 발생:", error);
-    }
-  };
+  if (error) return <p>상세정보 값 가져오는데 에러남</p>;
 
   return (
     <table className="write">

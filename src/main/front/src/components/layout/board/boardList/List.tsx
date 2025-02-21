@@ -61,11 +61,14 @@ export const List = ({ listData }: ListProps) => {
           </tr>
         </thead>
         <tbody>
+          
           {listData.boardList &&
-            listData.boardList.map((board) => {
+            listData.boardList.map((board, i) => {
+              const rowNum = listData.totalListAmount - ((search.page-1)*search.pageSize+i);
+              console.log(listData.boardList.length);
               return (
                 <tr key={board.board_no}>
-                  <td>{board.board_no}</td>
+                  <td>{rowNum}</td>
                   <td>{board.comm_cd_nm}</td>
                   <td className="l">
                     <Link to={`/board/detail/${board.board_no}`}>

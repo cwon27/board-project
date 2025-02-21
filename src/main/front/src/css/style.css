@@ -1972,9 +1972,6 @@ table.view .ic-del {
   background-color: #fff;
 }
 
-.paginate_complex .disabled{
-  display: none;
-}
 .paginate_complex .fir {
   background-image: url(../images/paging_fir.gif);
 }

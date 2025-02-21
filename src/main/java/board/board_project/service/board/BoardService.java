@@ -80,7 +80,6 @@ public class BoardService {
             throw new RuntimeException("게시물 등록 실패");
         }
 
-
         try {
             //파일 등록
             fileService.saveFiles(fileItems, board_no);

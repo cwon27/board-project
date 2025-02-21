@@ -6,10 +6,15 @@ interface DetailBtnProps {
 }
 
 export const DetailBtn = ({board_no}:DetailBtnProps) => {
+  //팝업 띄우기
+  const onPopup = (action:string) => {
+    const url = "/board/pwCheck/"+board_no+"?action="+action;
+    window.open(url,"_blank");
+  }
   const { setBeforeSearch } = useSearch();
   return (
     <div className="btn-box r">
-      <Link to={`/board/pwCheck/${board_no}?action=edit`} className="btn btn-green">
+      <Link to="" className="btn btn-green" onClick={()=>onPopup("edit")}>
         수정
       </Link>
       <Link to={`/board/pwCheck/${board_no}?action=delete`} className="btn btn-red">
