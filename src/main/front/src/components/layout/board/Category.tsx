@@ -3,8 +3,12 @@ import { getCategoryData } from "../../../apis/service";
 import { CategoryData } from "../../../model/types";
 import { useSearch } from "../../../hooks/useSearch";
 
+interface CategoryProps {
+  isUpdate: boolean;
+  initialValue?: string;
+}
 
-export const Category = () => {
+export const Category = ({isUpdate,initialValue}:CategoryProps) => {
   //recoil 카테고리 상태
   const { search, updateCategory } = useSearch();
 
@@ -16,6 +20,9 @@ export const Category = () => {
 
   if (isLoading) return <p>로딩중....</p>;
   if (error) return <p>카테고리 값 가져오는데 에러남</p>;
+
+  //선택된 카테고리값
+  const selectedValue = isUpdate ? initialValue : search.searchCategoryType.comm_cd;
 
   //카테고리 값 상태 업데이트 함수
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -33,7 +40,7 @@ export const Category = () => {
     <select
       className="select"
       style={{ width: "150px" }}
-      value={search.searchCategoryType.comm_cd}
+      value={selectedValue}
       onChange={handleChange}
     >
       <option value={"ALL"}>전체</option>

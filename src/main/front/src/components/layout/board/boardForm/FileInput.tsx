@@ -1,13 +1,30 @@
-import { useState } from "react";
-import { FileItem } from "../../../../model/types";
+import { useEffect, useState } from "react";
+import { FileData, FileItem } from "../../../../model/types";
+import { handleDownload } from "../../../../utils/boardUtil";
 
 interface FileInputProps {
   onChange: (newFiles: FileItem[]) => void;
+  existingFiles : FileData[];
 }
 
-export const FileInput = ({ onChange }: FileInputProps) => {
-  //파일 상태 관리 -> 여기서만 사용하니까 state로 처리함
+export const FileInput = ({ onChange, existingFiles }: FileInputProps) => {
+  //파일 상태 관리 
   const [files, setFiles] = useState<FileItem[]>([{ file: null }]);
+
+  console.log(existingFiles);
+
+  useEffect(() => {
+    // 기존 파일 데이터가 있으면 초기화
+    if (existingFiles && existingFiles.length > 0) {
+      const newFiles = existingFiles.map((fileData) => ({
+        file: new File([], ""), 
+        fileData,    // 기존 파일 정보
+      }));
+      setFiles(newFiles);
+    }
+  }, [existingFiles]);
+
+  console.log(files);//->기존 파일 잘 들가있음
 
   //파일 선택
   const handleFileChange = (
@@ -66,7 +83,15 @@ export const FileInput = ({ onChange }: FileInputProps) => {
           <td colSpan={3} className="file-style">
             {fileItem.file ? (
               <div className="file-display">
-                <span style={{ fontSize: "15px" }}>{fileItem.file.name}</span>
+                {/* fileItem.fileData가 있으면 다운로드 버튼 표시 */}
+                {fileItem.fileData && fileItem.fileData.file_no !== undefined && (
+                  <button
+                    className="ic-file2 fileBtn"
+                    onClick={() => handleDownload(fileItem.fileData?.file_no)}
+                  >
+                  </button>
+                )}
+                <span style={{ fontSize: "15px" }}>{fileItem.file.name || fileItem.fileData?.origin_file_nm}</span>
                 <button
                   className="file-del-btn"
                   onClick={() => handleRemove(i)}

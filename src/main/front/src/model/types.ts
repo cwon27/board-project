@@ -37,7 +37,8 @@ export interface BoardData {
 
 //파일 데이터
 export interface FileItem {
-  file: File | null; //선택된 파일데이터터
+  file: File | null; //선택된 파일데이터
+  fileData?: FileData; // 추가된 fileData 속성
 }
 
 //상세정보

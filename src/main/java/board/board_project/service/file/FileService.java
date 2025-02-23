@@ -105,12 +105,13 @@ public class FileService {
 
         for(FileDataDTO file : files){
             String filePath = file.getSave_path();
+            int fileNo = file.getFile_no();
 
             log.info("파일 삭제 시도: filePath = {}", filePath);
 
             if(filePath != null && !filePath.isEmpty()){
                 //파일 삭제하기
-                deleteFile(filePath);
+                deleteFile(filePath,fileNo);
             }else{
                 throw new RuntimeException("파일 경로가 유효하지 않습니다.");
             }
@@ -118,7 +119,7 @@ public class FileService {
     }
 
     //파일 삭제(개별)
-    public void deleteFile(String filePath){
+    public void deleteFile(String filePath, int fileNo){
         Path path = Paths.get(filePath);
         log.info("파일 존재 여부 확인: {}", filePath);
 
@@ -128,7 +129,7 @@ public class FileService {
                 //파일 삭제
                 Files.delete(path);
                 //DB에서도 삭제
-                int result = fileMapper.deleteFile(filePath);
+                int result = fileMapper.deleteFile(fileNo);
 
                 if(result<=0){
                     throw new RuntimeException("파일 삭제를 실패했습니다.(DB 삭제 실패)");

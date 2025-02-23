@@ -142,11 +142,11 @@ export const downloadincrement = async (file_no: number) => {
 
 //비밀번호 확인
 export const passwordCheck = async (boardNo: number, password: string) => {
-  console.log({ boardNo, password }); // 데이터 확인
   const response = await apiUrl.post(
     `/board/checkPassword/${boardNo}`,
     password
   );
+  
   return response.data;
 };
 

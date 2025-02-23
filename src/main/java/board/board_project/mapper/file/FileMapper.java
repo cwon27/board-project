@@ -24,5 +24,5 @@ public interface FileMapper {
     void downloadFileCnt(int file_no);
 
     //파일 삭제
-    int deleteFile(String filePath);
+    int deleteFile(int fileNo);
 }

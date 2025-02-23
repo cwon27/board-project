@@ -22,7 +22,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //글등록인 경우 카테고리 전체로 초기화
   useEffect(() => {
-    if (!isUpdate) {
+    if (!isUpdate && formData.category_cd == "ALL") {
       setSearch((prev) => ({
         ...prev,
         searchCategoryType: {
@@ -43,18 +43,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
     password: "",
   });
 
-  //initialData가 변경될때마다 실행행
-  useEffect(() => {
-    if (isUpdate && initialData) {
-      setFormData({
-        category_cd: initialData.boardDetail.category_cd,
-        title: initialData.boardDetail.title,
-        cont: initialData.boardDetail.cont,
-        writer_nm: initialData.boardDetail.writer_nm,
-        password: "",
-      });
-    }
-  }, [isUpdate, initialData]);
+  console.log(formData.category_cd);
 
   //데이터 변경 함수
   const handleDataChange = (
@@ -66,10 +55,12 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //카테고리 데이터 변경된 걸 setFormData에 update -> search.searchCategoryType 값이 변할때마다 실행
   useEffect(() => {
+    if (isUpdate && formData.category_cd != "ALL" && search.searchCategoryType.comm_cd != "ALL") {
     setFormData((prev) => ({
       ...prev,
       category_cd: search.searchCategoryType.comm_cd,
     }));
+  }
   }, [search.searchCategoryType]);
 
   //toast-ui에 있는 값
@@ -84,7 +75,28 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //react-query useMutation 사용하여 api함수 호출
   //파일값 상태 관리
+  //새로운 파일
   const [files, setFiles] = useState<FileItem[]>([]);
+//기존 파일
+const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
+
+  useEffect(() => {
+    if (isUpdate && initialData) {
+      setFormData({
+        category_cd: initialData.boardDetail.category_cd,
+        title: initialData.boardDetail.title,
+        cont: initialData.boardDetail.cont,
+        writer_nm: initialData.boardDetail.writer_nm,
+        password: "",
+      });
+
+      setExistingFiles(Array.isArray(initialData.fileData) ? initialData.fileData : [initialData.fileData]);
+    }
+  }, [isUpdate, initialData]);
+
+  console.log(existingFiles);
+
+  //파일 변경
   const handleFileChange = (newFiles: FileItem[]) => {
     setFiles(newFiles);
   };
@@ -201,7 +213,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
               카테고리 <i className="req">*</i>
             </th>
             <td colSpan={3}>
-              <Category/>
+              <Category isUpdate={isUpdate} initialValue={isUpdate ? formData.category_cd : " "}/>
             </td>
           </tr>
           <tr>
@@ -230,7 +242,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
               />
             </td>
           </tr>
-          <FileInput onChange={handleFileChange} />
+          <FileInput onChange={handleFileChange} existingFiles={existingFiles}/>
         </tbody>
       </table>
       <div className="btn-box r">

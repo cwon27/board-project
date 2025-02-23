@@ -61,6 +61,6 @@
 <!--    파일 삭제-->
     <delete id="deleteFile">
         DELETE FROM bt_tb_file
-        WHERE save_path = #{filePath}
+        WHERE file_no = #{fileNo}
     </delete>
 </mapper>

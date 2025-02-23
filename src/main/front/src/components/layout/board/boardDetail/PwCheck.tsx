@@ -4,10 +4,8 @@ import { deleteData, passwordCheck } from "../../../../apis/service";
 import { useSearch } from "../../../../hooks/useSearch";
 
 export const PwCheck = () => {
-  //닫기버튼 클릭시 뒤로가기
-  const navigator = useNavigate();
   const handleClose = () => {
-    navigator(-1);
+    window.close();
   }
 
   //board_no
@@ -41,8 +39,11 @@ export const PwCheck = () => {
         // 비밀번호 일치
         //수정
         if (action == "edit") {
-          // 수정 작업을 처리하고 수정 페이지로 이동
-          navigator(`/board/update/${boardNo}`);
+          window.close();
+
+          if (window.opener) {
+            window.opener.location.href = `/board/update/${boardNo}`;
+          }
         } else if (action == "delete") {
           //삭제
           const isConfirm = confirm("정말 삭제하시겠습니까?");
@@ -54,7 +55,12 @@ export const PwCheck = () => {
             if(deleteResponse.success){
               alert("삭제가 완료되었습니다!");
               resetSearch();
-              navigator("/board/list")
+              
+              if (window.opener) {
+                window.opener.location.href = "/board/list";
+              }
+
+              window.close();
             }else{
               alert("삭제를 실패했습니다.");
             }
