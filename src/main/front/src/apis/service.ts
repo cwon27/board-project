@@ -150,7 +150,7 @@ export const passwordCheck = async (boardNo: number, password: string) => {
   return response.data;
 };
 
-//데이터 삭제
+//데이터 삭제 
 export const deleteData = async (boardNo: number) => {
   const response = await apiUrl.delete(`/board/delete/${boardNo}`);
 
@@ -158,15 +158,41 @@ export const deleteData = async (boardNo: number) => {
 };
 
 //글 수정
-export const updateBoard = async (board_no:number,formdata: BoardData) => {
+export const updateBoard = async (board_no:number,formdata: BoardData, fileItems: File[]) => {
   const updateData = new FormData();
   //board_no 추가
-  updateData.append("board_no",`${board_no}`);
-  updateData.append("category_cd",formdata.category_cd);
-  updateData.append("title",formdata.title);
-  updateData.append("cont",formdata.cont);
+  updateData.append(
+    "formData", 
+    new Blob([JSON.stringify({
+      board_no: board_no,
+      category_cd: formdata.category_cd,
+      title: formdata.title,
+      cont: formdata.cont
+    })], { type: "application/json" })
+  );
 
-  const response = await apiUrl.put("/board/update", updateData);
+  //파일 추가
+  fileItems.forEach((file) => {
+    updateData.append("fileItems", file);
+  });
+
+  const response = await apiUrl.put("/board/update", updateData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data;
 }
+
+//기존 파일 삭제(수정시 사용)
+export const deleteFile = async(save_path:string, file_no:number)=>{
+  const response = await apiUrl.delete("/file/delete",{
+    params: {
+      save_path: save_path,
+      file_no: file_no
+    }
+  });
+
+  return response.data;
+};

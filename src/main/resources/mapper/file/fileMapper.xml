@@ -41,6 +41,7 @@
         JOIN bt_tb_board b
         ON f.ref_pk = b.board_no
         WHERE b.board_no = #{board_no}
+        ORDER BY ord
     </select>
 
 <!--    다운로드 파일 데이터-->

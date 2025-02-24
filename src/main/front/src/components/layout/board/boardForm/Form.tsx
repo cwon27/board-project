@@ -22,7 +22,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //글등록인 경우 카테고리 전체로 초기화
   useEffect(() => {
-    if (!isUpdate && formData.category_cd == "ALL") {
+    if (!isUpdate) {
       setSearch((prev) => ({
         ...prev,
         searchCategoryType: {
@@ -43,8 +43,6 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
     password: "",
   });
 
-  console.log(formData.category_cd);
-
   //데이터 변경 함수
   const handleDataChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,13 +53,14 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //카테고리 데이터 변경된 걸 setFormData에 update -> search.searchCategoryType 값이 변할때마다 실행
   useEffect(() => {
-    if (isUpdate && formData.category_cd != "ALL" && search.searchCategoryType.comm_cd != "ALL") {
+    if (search.searchCategoryType.comm_cd !== "ALL") {
     setFormData((prev) => ({
       ...prev,
       category_cd: search.searchCategoryType.comm_cd,
     }));
   }
   }, [search.searchCategoryType]);
+
 
   //toast-ui에 있는 값
   const handleEditorChange = (cont: string) => {
@@ -94,8 +93,6 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
     }
   }, [isUpdate, initialData]);
 
-  console.log(existingFiles);
-
   //파일 변경
   const handleFileChange = (newFiles: FileItem[]) => {
     setFiles(newFiles);
@@ -113,7 +110,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
           if (!initialData?.boardDetail.board_no) {
             throw new Error('게시글 번호가 없습니다.');
           }
-          return updateBoard(initialData.boardDetail.board_no, formdata);
+          return updateBoard(initialData.boardDetail.board_no, formdata, filterdFile);
         }
         return saveBoard(formdata,filterdFile);
     },
@@ -162,7 +159,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
       return;
     }
     //6.첨부파일 1개 이상
-    if (!files[0]?.file) {
+    if (files.length === 0 && existingFiles.length === 0) {
       alert("파일은 1개 이상 선택해주세요!");
       return;
     }
@@ -242,7 +239,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
               />
             </td>
           </tr>
-          <FileInput onChange={handleFileChange} existingFiles={existingFiles}/>
+          <FileInput onChange={handleFileChange} existingFiles={existingFiles} isUpdate={isUpdate}/>
         </tbody>
       </table>
       <div className="btn-box r">

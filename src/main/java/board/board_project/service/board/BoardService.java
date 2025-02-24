@@ -104,8 +104,20 @@ public class BoardService {
     }
 
     //글 수정
-    public int updateBoard(UpdateBoardDTO updateBoardDTO) {
-        return boardMapper.updateBoard(updateBoardDTO);
+    @Transactional
+    public void updateBoardAndFiles(UpdateBoardDTO updateBoardDTO, List<MultipartFile> fileItems) {
+        //글 수정
+        int result = boardMapper.updateBoard(updateBoardDTO);
+
+        if(result<=0){
+            throw new RuntimeException("게시물 수정 실패");
+        }
+
+        try {
+            fileService.saveFiles(fileItems, updateBoardDTO.getBoard_no());
+        }catch (Exception e){
+            throw new RuntimeException("파일 수정 실패", e);
+        }
     }
 
     //글 삭제

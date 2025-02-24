@@ -32,9 +32,13 @@ public class FileService {
     public void saveFiles(List<MultipartFile> fileItems, int board_no) {
         if (fileItems != null && !fileItems.isEmpty()) {
             for (int i = 0; i < fileItems.size(); i++) {
-                saveFile(fileItems.get(i), board_no, i + 1); // 파일 순서는 1부터 시작하도록 설정
-            }
+                MultipartFile fileItem = fileItems.get(i);
 
+                //기존파일은 저장X 새로운 파일만 저장
+                if(!fileItem.getOriginalFilename().isEmpty() && fileItem.getSize()>0) {
+                    saveFile(fileItem, board_no, i + 1); // 파일 순서는 1부터 시작하도록 설정
+                }
+            }
         }
     }
 

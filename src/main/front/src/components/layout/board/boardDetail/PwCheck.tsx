@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { deleteData, passwordCheck } from "../../../../apis/service";
 import { useSearch } from "../../../../hooks/useSearch";
 

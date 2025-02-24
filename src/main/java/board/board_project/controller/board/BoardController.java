@@ -83,18 +83,25 @@ public class BoardController {
 
     //글 수정(Update) api
     @PutMapping("/update")
-    public ResponseEntity<Map<String, Object>> updateBoard(@RequestBody UpdateBoardDTO updateBoardDTO) {
-        int result = boardService.updateBoard(updateBoardDTO);
-
+    public ResponseEntity<Map<String, Object>> updateBoard(@RequestPart("formData") UpdateBoardDTO updateBoardDTO,
+                                                           @RequestPart("fileItems") List<MultipartFile> fileItems) {
         Map<String, Object> response = new HashMap<>();
-        if (result > 0) {
-            //수정 성공
-            response.put("success", true);
-        } else {
-            response.put("success", false);
-        }
 
-        return ResponseEntity.ok(response);
+        try {
+            //파일이 있는 경우에만 처리
+            if(fileItems != null && !fileItems.isEmpty()){
+                boardService.updateBoardAndFiles(updateBoardDTO,fileItems);
+
+                response.put("success",true);
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("success",false);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            }
+        } catch (Exception e) {
+            response.put("success",false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     //글 삭제(Delete) api
