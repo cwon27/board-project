@@ -10,7 +10,9 @@ export const Menubar = () => {
       </h2>
       <ul className="snb">
         <li className="snb1 active">
-          <Link to="/board/list" onClick={resetSearch}>통합게시판</Link>
+          <Link to="/list" onClick={resetSearch}>
+            통합게시판
+          </Link>
         </li>
       </ul>
     </div>

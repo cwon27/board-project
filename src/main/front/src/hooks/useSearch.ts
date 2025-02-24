@@ -12,7 +12,7 @@ export const useSearch = () => {
   const resetToInitial = () => {
     resetSearch();
   };
-  
+
   //검색조건 유지
   const beforeSearch = useRef(search);
   useEffect(() => {
@@ -21,8 +21,8 @@ export const useSearch = () => {
 
   const setBeforeSearch = () => {
     setSearch(beforeSearch.current);
-    console.log('After setSearch:', search);
-  }
+    console.log("After setSearch:", search);
+  };
 
   //카테고리 업데이트
   const updateCategory = (categoryCode: string, categoryName: string) => {
@@ -55,7 +55,7 @@ export const useSearch = () => {
   const updateSortType = (sortType: string) => {
     setSearch((prev) => ({
       ...prev,
-      page:1,
+      page: 1,
       sortType: sortType,
     }));
   };
@@ -72,7 +72,7 @@ export const useSearch = () => {
   const updatePageSize = (pageSize: number) => {
     setSearch((prev) => ({
       ...prev,
-      page:1,
+      page: 1,
       pageSize: pageSize,
     }));
   };

@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -40,7 +41,7 @@ public class FileController {
         return ResponseEntity.ok(fileData);
     }
 
-    //파일 다운로드
+    //파일 다운로드 -> 한글로 다운안되는거 나중에 체크
     @GetMapping("/download/{file_no}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("file_no") int file_no) {
         //파일 정보 찾기
@@ -48,6 +49,7 @@ public class FileController {
 
         //파일 경로랑 객체 준비
         Path filePath = Paths.get(fileData.getSave_path());
+
         //다운로드할 파일을 가르키는 객체
         Resource resource = new FileSystemResource(filePath);
 
@@ -58,6 +60,9 @@ public class FileController {
 
         String encodedFileName = URLEncoder.encode(fileData.getOrigin_file_nm(), StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20");
+
+        log.info("encodedFileName : {}",encodedFileName);
+        log.info(("orginal : {}"),fileData.getOrigin_file_nm());
 
         //파일 응답 반환
         return ResponseEntity.ok()

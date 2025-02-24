@@ -6,7 +6,7 @@ import { useSearch } from "../../../../hooks/useSearch";
 export const PwCheck = () => {
   const handleClose = () => {
     window.close();
-  }
+  };
 
   //board_no
   const { board_no } = useParams();
@@ -15,11 +15,11 @@ export const PwCheck = () => {
   //비밀번호값 상태 관리
   const [password, setPassword] = useState<string>("");
 
-  const handlePwValue = (e: React.ChangeEvent<HTMLInputElement>) =>{
+  const handlePwValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  }
+  };
 
-  //action 
+  //action
   const urlParams = new URLSearchParams(location.search);
   const action = urlParams.get("action");
 
@@ -29,7 +29,7 @@ export const PwCheck = () => {
   //비밀번호 확인 api 호출
   const handlePwCheck = async () => {
     try {
-      if (!password || password.length>100) {
+      if (!password || password.length > 100) {
         alert("비밀번호를 입력해주세요.");
         return;
       }
@@ -42,26 +42,26 @@ export const PwCheck = () => {
           window.close();
 
           if (window.opener) {
-            window.opener.location.href = `/board/update/${boardNo}`;
+            window.opener.location.href = `/update/${boardNo}`;
           }
         } else if (action == "delete") {
           //삭제
           const isConfirm = confirm("정말 삭제하시겠습니까?");
-          if(isConfirm){
+          if (isConfirm) {
             //삭제 진행
             console.log(boardNo);
             const deleteResponse = await deleteData(boardNo);
 
-            if(deleteResponse.success){
+            if (deleteResponse.success) {
               alert("삭제가 완료되었습니다!");
               resetSearch();
-              
+
               if (window.opener) {
-                window.opener.location.href = "/board/list";
+                window.opener.location.href = "/list";
               }
 
               window.close();
-            }else{
+            } else {
               alert("삭제를 실패했습니다.");
             }
           }
@@ -72,9 +72,9 @@ export const PwCheck = () => {
         setPassword("");
       }
     } catch (error) {
-      console.error('비밀번호 확인 중 오류 발생:', error);
+      console.error("비밀번호 확인 중 오류 발생:", error);
     }
-  }
+  };
 
   return (
     <div className="pop-wrap">

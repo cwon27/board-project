@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Category } from "../Category";
 import { ToastEditor } from "./ToastEditor";
-import { BoardData, BoardDetail, FileData, FileItem } from "../../../../model/types";
+import {
+  BoardData,
+  BoardDetail,
+  FileData,
+  FileItem,
+} from "../../../../model/types";
 import { useMutation } from "@tanstack/react-query";
 import { saveBoard, updateBoard } from "../../../../apis/service";
 import { FileInput } from "./FileInput";
@@ -12,13 +17,18 @@ interface FormProps {
   //통해서 등록인지 수정인지 구분
   isUpdate: boolean;
   initialData?: {
-    boardDetail:BoardDetail,
-    fileData : FileData
-  }
+    boardDetail: BoardDetail;
+    fileData: FileData;
+  };
 }
 
 export const Form = ({ isUpdate, initialData }: FormProps) => {
   const { search, setSearch, resetSearch, setBeforeSearch } = useSearch();
+
+  //focus를 위한 ref 설정
+  const writerRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLInputElement>(null);
 
   //글등록인 경우 카테고리 전체로 초기화
   useEffect(() => {
@@ -33,8 +43,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
     }
   }, [isUpdate, setSearch]);
 
-  //** 글 등록
-  //데이터 상태 관리
+  // 글 등록, 수정 데이터 상태 관리
   const [formData, setFormData] = useState<BoardData>({
     category_cd: initialData?.boardDetail.category_cd || "ALL",
     title: initialData?.boardDetail.title || "",
@@ -43,7 +52,7 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
     password: "",
   });
 
-  //데이터 변경 함수
+  //formData 변경 함수 -> 제목, 작성자 등..
   const handleDataChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -54,13 +63,12 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
   //카테고리 데이터 변경된 걸 setFormData에 update -> search.searchCategoryType 값이 변할때마다 실행
   useEffect(() => {
     if (search.searchCategoryType.comm_cd !== "ALL") {
-    setFormData((prev) => ({
-      ...prev,
-      category_cd: search.searchCategoryType.comm_cd,
-    }));
-  }
+      setFormData((prev) => ({
+        ...prev,
+        category_cd: search.searchCategoryType.comm_cd,
+      }));
+    }
   }, [search.searchCategoryType]);
-
 
   //toast-ui에 있는 값
   const handleEditorChange = (cont: string) => {
@@ -74,10 +82,10 @@ export const Form = ({ isUpdate, initialData }: FormProps) => {
 
   //react-query useMutation 사용하여 api함수 호출
   //파일값 상태 관리
-  //새로운 파일
+  //백엔드로 넘겨줄 파일 데이터
   const [files, setFiles] = useState<FileItem[]>([]);
-//기존 파일
-const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
+  //기존 파일
+  const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
 
   useEffect(() => {
     if (isUpdate && initialData) {
@@ -89,7 +97,11 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
         password: "",
       });
 
-      setExistingFiles(Array.isArray(initialData.fileData) ? initialData.fileData : [initialData.fileData]);
+      setExistingFiles(
+        Array.isArray(initialData.fileData)
+          ? initialData.fileData
+          : [initialData.fileData]
+      );
     }
   }, [isUpdate, initialData]);
 
@@ -102,17 +114,25 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
   const mutation = useMutation({
     mutationFn: async (formdata: BoardData) => {
       // null이 아닌 실제 File 객체만 추출
+      // 기존 데이터들의 fileData도 추출 -> 백엔드에는 File 객체로 보내야하기 때문
       const filterdFile = files
         .map((item) => item.file)
         .filter((file): file is File => file !== null);
 
-        if (isUpdate) {
-          if (!initialData?.boardDetail.board_no) {
-            throw new Error('게시글 번호가 없습니다.');
-          }
-          return updateBoard(initialData.boardDetail.board_no, formdata, filterdFile);
+      console.log(files);
+      console.log(filterdFile);
+
+      if (isUpdate) {
+        if (!initialData?.boardDetail.board_no) {
+          throw new Error("게시글 번호가 없습니다.");
         }
-        return saveBoard(formdata,filterdFile);
+        return updateBoard(
+          initialData.boardDetail.board_no,
+          formdata,
+          filterdFile
+        );
+      }
+      return saveBoard(formdata, filterdFile);
     },
     onSuccess: (response) => {
       if (response.success) {
@@ -120,7 +140,9 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
         //검색 조건 초기화
         resetSearch();
         //목록으로 이동
-        navigator("/board/list");
+        navigator(
+          !isUpdate ? "/list" : "/detail/" + initialData?.boardDetail.board_no
+        );
       } else {
         alert(isUpdate ? "수정을 실패했습니다." : "저장을 실패했습니다.");
       }
@@ -134,13 +156,21 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
   const handleSubmit = () => {
     //유효성 검사 추가
     //1. 작성자
-    if (!isUpdate && (!formData.writer_nm.trim() || formData.writer_nm.length > 50)) {
+    if (
+      !isUpdate &&
+      (!formData.writer_nm.trim() || formData.writer_nm.length > 50)
+    ) {
       alert("작성자를 다시 입력해주세요! (필수로 입력, 50자 이내)");
+      writerRef.current?.focus();
       return;
     }
     //2. 비밀번호
-    if (!isUpdate && (!formData.password.trim() || formData.password.length > 100)) {
+    if (
+      !isUpdate &&
+      (!formData.password.trim() || formData.password.length > 100)
+    ) {
       alert("비밀번호를 다시 입력해주세요! (필수로 입력, 100자 이내)");
+      passwordRef.current?.focus();
       return;
     }
     //3. 카테고리
@@ -151,6 +181,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
     //4. 제목
     if (!formData.title.trim() || formData.title.length > 200) {
       alert("제목을 다시 입력해주세요! (필수로 입력, 200자 이내)");
+      titleRef.current?.focus();
       return;
     }
     //5. 내용
@@ -159,7 +190,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
       return;
     }
     //6.첨부파일 1개 이상
-    if (files.length === 0 && existingFiles.length === 0) {
+    if (!files[0]?.file) {
       alert("파일은 1개 이상 선택해주세요!");
       return;
     }
@@ -189,6 +220,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
                 onChange={handleDataChange}
                 value={formData.writer_nm}
                 readOnly={isUpdate}
+                ref={writerRef}
               />
             </td>
             <th className="fir">
@@ -202,6 +234,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
                 onChange={handleDataChange}
                 value={isUpdate ? "*******" : formData.password}
                 readOnly={isUpdate}
+                ref={passwordRef}
               />
             </td>
           </tr>
@@ -210,7 +243,10 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
               카테고리 <i className="req">*</i>
             </th>
             <td colSpan={3}>
-              <Category isUpdate={isUpdate} initialValue={isUpdate ? formData.category_cd : " "}/>
+              <Category
+                isUpdate={isUpdate}
+                initialValue={isUpdate ? formData.category_cd : " "}
+              />
             </td>
           </tr>
           <tr>
@@ -225,6 +261,7 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
                 name="title"
                 onChange={handleDataChange}
                 value={formData.title}
+                ref={titleRef}
               />
             </td>
           </tr>
@@ -239,18 +276,18 @@ const [existingFiles, setExistingFiles] = useState<FileData[]>([]);
               />
             </td>
           </tr>
-          <FileInput onChange={handleFileChange} existingFiles={existingFiles} isUpdate={isUpdate}/>
+          <FileInput
+            onChange={handleFileChange}
+            existingFiles={existingFiles}
+            isUpdate={isUpdate}
+          />
         </tbody>
       </table>
       <div className="btn-box r">
         <Link to="#" className="btn btn-red" onClick={handleSubmit}>
           저장
         </Link>
-        <Link
-          to="/board/list"
-          className="btn btn-default"
-          onClick={setBeforeSearch}
-        >
+        <Link to="/list" className="btn btn-default" onClick={setBeforeSearch}>
           취소
         </Link>
       </div>

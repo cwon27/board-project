@@ -1,28 +1,25 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCategoryData } from "../../../apis/service";
-import { CategoryData } from "../../../model/types";
 import { useSearch } from "../../../hooks/useSearch";
+import { useCategoryData } from "../../../hooks/useQuery";
 
 interface CategoryProps {
   isUpdate: boolean;
   initialValue?: string;
 }
 
-export const Category = ({isUpdate,initialValue}:CategoryProps) => {
+export const Category = ({ isUpdate, initialValue }: CategoryProps) => {
   //recoil 카테고리 상태
   const { search, updateCategory } = useSearch();
 
   //카테고리 값 option에 뿌리기
-  const { data, isLoading, error } = useQuery<CategoryData[]>({
-    queryKey: ["categoryData"], //쿼리 고유 식별자
-    queryFn: getCategoryData, //데이터 가져오기 작업 수행함 -> apis/service.ts에 있다.
-  });
+  const { data, isLoading, error } = useCategoryData();
 
   if (isLoading) return <p>로딩중....</p>;
   if (error) return <p>카테고리 값 가져오는데 에러남</p>;
 
   //선택된 카테고리값
-  const selectedValue = isUpdate ? initialValue : search.searchCategoryType.comm_cd;
+  const selectedValue = isUpdate
+    ? initialValue
+    : search.searchCategoryType.comm_cd;
 
   //카테고리 값 상태 업데이트 함수
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -70,24 +70,26 @@ public class BoardService {
     //글 & 파일 저장
     @Transactional
     public void saveBoardAndFiles(SaveBoardDTO saveBoardDTO, List<MultipartFile> fileItems) {
-        //글 등록
-        int result = boardMapper.saveBoard(saveBoardDTO);
-
-        int board_no = saveBoardDTO.getBoard_no();
-        log.info("*****BoardServie board_no : {}", board_no);
-
-        if (result <= 0) {
-            throw new RuntimeException("게시물 등록 실패");
-        }
-
         try {
-            //파일 등록
-            fileService.saveFiles(fileItems, board_no);
+            //글 등록
+            int result = boardMapper.saveBoard(saveBoardDTO);
+
+            int board_no = saveBoardDTO.getBoard_no();
+            log.info("*****BoardServie board_no : {}", board_no);
+
+            if (result <= 0) {
+                throw new RuntimeException("게시물 등록 실패");
+            } else {
+                //파일 등록
+                fileService.saveFiles(fileItems, board_no);
+            }
+
         } catch (Exception e) {
+            log.error("파일 등록 중 오류 발생: board_no = {}, error = {}", saveBoardDTO.getBoard_no(), e.getMessage());
             throw new RuntimeException("파일 등록 실패", e);
         }
     }
-    
+
     //글 상세 데이터 GET
     public BoardDetailDTO getBoardDetail(int board_no) {
         BoardDetailDTO boardDetailData = boardMapper.getBoardDetail(board_no);
@@ -106,16 +108,17 @@ public class BoardService {
     //글 수정
     @Transactional
     public void updateBoardAndFiles(UpdateBoardDTO updateBoardDTO, List<MultipartFile> fileItems) {
-        //글 수정
-        int result = boardMapper.updateBoard(updateBoardDTO);
-
-        if(result<=0){
-            throw new RuntimeException("게시물 수정 실패");
-        }
-
         try {
-            fileService.saveFiles(fileItems, updateBoardDTO.getBoard_no());
-        }catch (Exception e){
+            //글 수정
+            int result = boardMapper.updateBoard(updateBoardDTO);
+
+            if (result <= 0) {
+                throw new RuntimeException("게시물 수정 실패");
+            } else {
+                fileService.saveFiles(fileItems, updateBoardDTO.getBoard_no());
+            }
+        } catch (Exception e) {
+            log.error("파일 수정 중 오류 발생: board_no = {}, error = {}", updateBoardDTO.getBoard_no(), e.getMessage());
             throw new RuntimeException("파일 수정 실패", e);
         }
     }
@@ -126,21 +129,19 @@ public class BoardService {
         log.info("삭제 요청: board_no = {}", board_no);
 
         try {
-            //파일 삭제
-            log.info("파일 삭제 진행: board_no = {}", board_no);
-            fileService.deleteFileAll(board_no);
-
             //글 삭제
             int result = boardMapper.deleteBoard(board_no);
 
             if (result <= 0) {
                 log.error("게시물 삭제 실패: board_no = {}", board_no);
                 throw new RuntimeException("게시물 삭제 실패");
+            } else {
+                //파일 삭제
+                log.info("파일 삭제 진행: board_no = {}", board_no);
+                fileService.deleteFileAll(board_no);
             }
-
         } catch (Exception e) {
             log.error("파일 삭제 중 오류 발생: board_no = {}, error = {}", board_no, e.getMessage());
-
             throw new RuntimeException("파일 삭제 실패", e);
         }
     }
@@ -167,11 +168,11 @@ public class BoardService {
     }
 
     //파일 존재하는지 체크
-    public List<BoardListDTO> isFileCheck(List<BoardListDTO> boardList){
-        boardList.forEach(board->{
+    public List<BoardListDTO> isFileCheck(List<BoardListDTO> boardList) {
+        boardList.forEach(board -> {
             //파일 갯수 받아오기
             int fileCnt = boardMapper.getFileCnt(board.getBoard_no());
-            board.set_file(fileCnt>0);
+            board.set_file(fileCnt > 0);
         });
 
         return boardList;

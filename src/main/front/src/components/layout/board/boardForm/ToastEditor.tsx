@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useImperativeHandle, useRef } from "react";
 import { Editor } from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";

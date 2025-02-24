@@ -13,15 +13,14 @@ export const BoardForm = ({ isUpdate }: BoardFormProps) => {
 
   //게시글 가져오기
 
-  const { data , isLoading, error } = useBoardUpdate(isUpdate,boardNo);
+  const { data, isLoading, error } = useBoardUpdate(isUpdate, boardNo);
 
-  if (isUpdate&&isLoading) return <p>로딩중....</p>;
+  if (isUpdate && isLoading) return <p>로딩중....</p>;
   if (error) return <p>수정데이터 값 가져오는데 에러남</p>;
 
   return (
     <>
-      <Form isUpdate={isUpdate}
-      initialData={data} />
+      <Form isUpdate={isUpdate} initialData={data} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -17,7 +17,9 @@ export const Footer = () => {
           출구)
           <br />
         </address>
-        <p className="copy">Copyright(C) 2024 by interplug. All Rights Reserved.</p>
+        <p className="copy">
+          Copyright(C) 2024 by interplug. All Rights Reserved.
+        </p>
         <div className="famliy-link">
           <button>관련 사이트 안내</button>
         </div>

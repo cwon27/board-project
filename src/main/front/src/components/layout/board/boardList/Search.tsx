@@ -3,10 +3,10 @@ import { Category } from "../Category";
 import { useSearch } from "../../../../hooks/useSearch";
 
 interface SearchProps {
-  onSearch: ()=>void;
+  onSearch: () => void;
 }
 
-export const Search = ({onSearch}:SearchProps) => {
+export const Search = ({ onSearch }: SearchProps) => {
   //검색조건 변경시 search 상태 변경
   const { search, updateSearchType, updateSearchKeyword } = useSearch();
 

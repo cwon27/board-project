@@ -45,16 +45,12 @@ export const getBoard = async (searchData: SearchData) => {
 
   const response = await apiUrl.post("/board/list", searchBoardDTO);
 
-  console.log(response.data);
-
   return response.data;
 };
 
 //상세보기
 export const getBoardDetail = async (board_no: number) => {
   const response = await apiUrl.get(`/board/listDetail/${board_no}`);
-
-  console.log(response.data);
 
   return response.data;
 };
@@ -68,8 +64,6 @@ export const viewCount = async (board_no: number) => {
 export const getFileData = async (board_no: number) => {
   const response = await apiUrl.get(`/file/data/${board_no}`);
 
-  console.log(response);
-
   return response.data;
 };
 
@@ -81,6 +75,8 @@ export const downloadFile = async (file_no: number) => {
     });
 
     console.log(response.headers);
+
+    console.log(response);
 
     const contentDisposition =
       response.headers["content-disposition"] ||
@@ -94,10 +90,9 @@ export const downloadFile = async (file_no: number) => {
 
     //파일명 추출
     try {
-      fileName = contentDisposition
-        .split("filename=")[1]
-        .replace(/"/g, "")
-        .trim();
+      fileName = decodeURIComponent(
+        contentDisposition.split("filename=")[1].replace(/"/g, "").trim()
+      );
     } catch (e) {
       console.warn("파일명 추출 실패, 기본 파일명을 사용합니다.", e);
     }
@@ -146,11 +141,11 @@ export const passwordCheck = async (boardNo: number, password: string) => {
     `/board/checkPassword/${boardNo}`,
     password
   );
-  
+
   return response.data;
 };
 
-//데이터 삭제 
+//데이터 삭제
 export const deleteData = async (boardNo: number) => {
   const response = await apiUrl.delete(`/board/delete/${boardNo}`);
 
@@ -158,17 +153,26 @@ export const deleteData = async (boardNo: number) => {
 };
 
 //글 수정
-export const updateBoard = async (board_no:number,formdata: BoardData, fileItems: File[]) => {
+export const updateBoard = async (
+  board_no: number,
+  formdata: BoardData,
+  fileItems: File[]
+) => {
   const updateData = new FormData();
   //board_no 추가
   updateData.append(
-    "formData", 
-    new Blob([JSON.stringify({
-      board_no: board_no,
-      category_cd: formdata.category_cd,
-      title: formdata.title,
-      cont: formdata.cont
-    })], { type: "application/json" })
+    "formData",
+    new Blob(
+      [
+        JSON.stringify({
+          board_no: board_no,
+          category_cd: formdata.category_cd,
+          title: formdata.title,
+          cont: formdata.cont,
+        }),
+      ],
+      { type: "application/json" }
+    )
   );
 
   //파일 추가
@@ -183,15 +187,15 @@ export const updateBoard = async (board_no:number,formdata: BoardData, fileItems
   });
 
   return response.data;
-}
+};
 
 //기존 파일 삭제(수정시 사용)
-export const deleteFile = async(save_path:string, file_no:number)=>{
-  const response = await apiUrl.delete("/file/delete",{
+export const deleteFile = async (save_path: string, file_no: number) => {
+  const response = await apiUrl.delete("/file/delete", {
     params: {
       save_path: save_path,
-      file_no: file_no
-    }
+      file_no: file_no,
+    },
   });
 
   return response.data;

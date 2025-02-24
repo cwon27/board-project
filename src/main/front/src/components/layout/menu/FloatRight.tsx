@@ -8,7 +8,9 @@ export const FloatRight = () => {
       <h2>QUICK MENU</h2>
       <ul>
         <li className="item1">
-          <Link to="/board/list" onClick={resetSearch}>통합게시판</Link>
+          <Link to="/list" onClick={resetSearch}>
+            통합게시판
+          </Link>
         </li>
       </ul>
     </div>

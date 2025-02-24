@@ -61,17 +61,31 @@ export const List = ({ listData }: ListProps) => {
           </tr>
         </thead>
         <tbody>
-          
-          {listData.boardList &&
+          {listData.boardList.length === 0 ? (
+            <tr>
+              <td
+                colSpan={7}
+                style={{
+                  textAlign: "center",
+                  border: "none",
+                  padding: "50px 0",
+                }}
+              >
+                게시물이 존재하지 않습니다.
+              </td>
+            </tr>
+          ) : (
             listData.boardList.map((board, i) => {
-              const rowNum = listData.totalListAmount - ((search.page-1)*search.pageSize+i);
-              console.log(listData.boardList.length);
+              const rowNum =
+                listData.totalListAmount -
+                (search.page - 1) * search.pageSize -
+                i;
               return (
                 <tr key={board.board_no}>
                   <td>{rowNum}</td>
                   <td>{board.comm_cd_nm}</td>
                   <td className="l">
-                    <Link to={`/board/detail/${board.board_no}`}>
+                    <Link to={`/detail/${board.board_no}`}>
                       {board.title}
                       {board._new && (
                         <img src="/src/images/new.gif" className="new" />
@@ -81,7 +95,7 @@ export const List = ({ listData }: ListProps) => {
                   <td>
                     {board._file && (
                       <Link
-                        to={`/board/detail/${board.board_no}`}
+                        to={`/detail/${board.board_no}`}
                         className="ic-file"
                       ></Link>
                     )}
@@ -91,7 +105,8 @@ export const List = ({ listData }: ListProps) => {
                   <td>{board.reg_dt}</td>
                 </tr>
               );
-            })}
+            })
+          )}
         </tbody>
       </table>
     </>

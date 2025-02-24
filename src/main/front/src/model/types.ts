@@ -6,8 +6,8 @@ export interface BoardList {
   writer_nm: string;
   view_cnt: number;
   reg_dt: string;
-  _new : boolean;
-  _file : boolean;
+  _new: boolean;
+  _file: boolean;
 }
 
 //검색 조건
@@ -43,27 +43,27 @@ export interface FileItem {
 
 //상세정보
 export interface BoardDetail {
-  board_no : number;
+  board_no: number;
   comm_cd_nm: string;
   title: string;
   writer_nm: string;
   reg_dt: string;
-  cont : string;
+  cont: string;
   category_cd: string;
 }
 
 //파일 데이터
 export interface FileData {
-  file_no : number;
-  origin_file_nm:string;
-  ord:number;
-  save_path:string;
+  file_no: number;
+  origin_file_nm: string;
+  ord: number;
+  save_path: string;
 }
 
 //글 update시 필요한한 데이터
-export interface BoardUpdateData{
-  board_no : number;
-  category_cd : string;
-  title : string;
-  cont : string;
+export interface BoardUpdateData {
+  board_no: number;
+  category_cd: string;
+  title: string;
+  cont: string;
 }

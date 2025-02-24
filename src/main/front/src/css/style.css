@@ -1672,11 +1672,13 @@ table.list > thead th {
   border-bottom: #fccbd4 1px solid;
 }
 table.list > tbody td {
-  padding: 8px 0;
+  padding: 8px;
   text-align: center;
   border-left: #e1e2e6 1px solid;
   border-bottom: #e1e2e6 1px solid;
-  word-break: break-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 table.list > tbody td.r {
   padding-right: 10px;
