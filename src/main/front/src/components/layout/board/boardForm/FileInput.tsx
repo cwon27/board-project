@@ -17,25 +17,31 @@ export const FileInput = ({
   //파일 상태 관리
   const [files, setFiles] = useState<FileItem[]>([{ file: null }]);
 
+  //기존 파일 셋팅 -> 수정시 사용
   useEffect(() => {
-    // 기존 파일 데이터가 있으면 초기화
+    // 기존 파일 데이터가 있으면 초기화(ord 없으면 null로 초기화)
     if (existingFiles && existingFiles.length > 0) {
-      let newFiles = [...files];
-      newFiles = existingFiles.map((fileData) => ({
-        file: new File([], ""),
-        fileData, // 기존 파일 정보
-      }));
+      let newFiles = new Array(3).fill({ file: null });
 
-      //input 나오게
-      if (newFiles.length < 3) {
-        newFiles.push({ file: null });
-      }
+      //기존 파일 ord 값에 맞게 매치
+      existingFiles.forEach((fileData) => {
+        if (fileData.ord >= 1 && fileData.ord <= 3) {
+          newFiles[fileData.ord - 1] = { file: new File([], ""), fileData };
+        }
+      });
+
+      console.log(newFiles);
 
       setFiles(newFiles);
+
+      const filteredFile = newFiles.filter(
+        (filterItem) => filterItem.file !== null
+      );
+      onChange(filteredFile);
     }
   }, [existingFiles]);
 
-  //파일 선택
+  //파일 선택 -> 추가
   const handleFileChange = (
     i: number,
     e: React.ChangeEvent<HTMLInputElement>
@@ -43,7 +49,7 @@ export const FileInput = ({
     //file이 선택되면?
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = [...files]; //기존 파일 목록 복사
-      newFiles[i].file = e.target.files[0]; //선택 파일 저장 -> 해당 index 위치에 저장
+      newFiles[i] = { ...newFiles[i], file: e.target.files[0] }; //선택 파일 저장 -> 해당 index 위치에 저장
 
       //최대 3개까지 추가 가능함 + 파일이 2개가 채워져있는 경우(null X)
       if (newFiles.length < 3 && !newFiles.some((item) => item.file == null)) {
@@ -51,6 +57,7 @@ export const FileInput = ({
       }
 
       setFiles(newFiles);
+      console.log(newFiles);
 
       //file이 null값인 애들은 보내면 안됨
       const filteredFile = newFiles.filter(
@@ -96,7 +103,7 @@ export const FileInput = ({
     }
   };
 
-  //파일 목록 업데이트
+  //파일 목록 업데이트 -> 삭제시 사용
   const updateFileList = (i: number) => {
     let newFiles = [...files];
 

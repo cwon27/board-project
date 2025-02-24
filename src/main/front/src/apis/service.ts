@@ -50,9 +50,21 @@ export const getBoard = async (searchData: SearchData) => {
 
 //상세보기
 export const getBoardDetail = async (board_no: number) => {
-  const response = await apiUrl.get(`/board/listDetail/${board_no}`);
+  try {
+    const response = await apiUrl.get(`/board/listDetail/${board_no}`);
+    if (!response.data) {
+      throw new Error('데이터가 존재하지 않습니다')
+    }
 
-  return response.data;
+    return response.data;
+  } catch (e: any) {
+    if (e.response) {
+      alert(`에러: ${e.response.data}`); 
+      location.href="/list";
+    } else {
+      alert("알 수 없는 오류 발생");
+    }
+  }
 };
 
 //조회수

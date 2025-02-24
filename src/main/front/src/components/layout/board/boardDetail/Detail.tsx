@@ -2,7 +2,6 @@ import React from "react";
 import { FileData } from "../../../../model/types";
 import { useBoardDetail } from "../../../../hooks/useQuery";
 import { handleDownload } from "../../../../utils/boardUtil";
-import { Navigate } from "react-router-dom";
 
 interface DetailProps {
   boardNo: number;
@@ -13,7 +12,7 @@ export const Detail = ({ boardNo }: DetailProps) => {
   const { data, isLoading, error } = useBoardDetail(boardNo);
 
   if (isLoading) return <p>로딩중....</p>;
-  if (error) return <Navigate to="/list" replace />;
+  if (error) return <p>상세 값 가져오는데 에러남</p>;
 
   return (
     <table className="write">

@@ -151,10 +151,14 @@ public class BoardController {
 
     //글 상세 Read api -> react에 데이터를 전달해서 그걸 화면에 뿌려줄거임(수정시에도 사용)
     @GetMapping("/listDetail/{board_no}")
-    public ResponseEntity<BoardDetailDTO> getBoarDetail(@PathVariable("board_no") int board_no) {
-        BoardDetailDTO boardDetailData = boardService.getBoardDetail(board_no);
+    public ResponseEntity<?> getBoarDetail(@PathVariable("board_no") int board_no) {
+        try {
+            BoardDetailDTO boardDetailData = boardService.getBoardDetail(board_no);
 
-        return ResponseEntity.ok(boardDetailData);
+            return ResponseEntity.ok(boardDetailData);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //조회수 처리 api

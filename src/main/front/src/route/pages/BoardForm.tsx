@@ -11,12 +11,11 @@ export const BoardForm = ({ isUpdate }: BoardFormProps) => {
   const { board_no } = useParams();
   const boardNo = board_no ? parseInt(board_no) : 0;
 
-  //게시글 가져오기
-
+  //게시글 가져오기 -> 수정시 사용용
   const { data, isLoading, error } = useBoardUpdate(isUpdate, boardNo);
 
   if (isUpdate && isLoading) return <p>로딩중....</p>;
-  if (error) return <p>수정데이터 값 가져오는데 에러남</p>;
+  if (error) return <p>수정 값 가져오는데 에러남</p>;
 
   return (
     <>
