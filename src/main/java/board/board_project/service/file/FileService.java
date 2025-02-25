@@ -6,6 +6,8 @@ import board.board_project.dto.response.file.FileDataDTO;
 import board.board_project.mapper.file.FileMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -144,6 +146,27 @@ public class FileService {
             }
         }else{
             throw new RuntimeException("삭제할 파일이 없습니다.");
+        }
+    }
+
+    //에디터 이미지 업로드
+    public String editorImgUpload(MultipartFile file) {
+        //업로드명
+        String uploadFileName = UUID.randomUUID().toString()+"_image_"+file.getOriginalFilename();
+        //저장 경로
+        String uploadPath = upload+uploadFileName;
+        try{
+            //파일 업로드
+            File editorImg = new File(uploadPath);
+            if(!editorImg.getParentFile().exists()){
+                editorImg.getParentFile().mkdir();
+            }
+            //실행
+            file.transferTo(editorImg);
+
+            return "http://localhost:8080/"+uploadFileName;
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 }

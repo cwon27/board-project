@@ -6,14 +6,13 @@ import board.board_project.service.file.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -21,7 +20,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 @Slf4j
 @RestController
@@ -61,8 +59,8 @@ public class FileController {
         String encodedFileName = URLEncoder.encode(fileData.getOrigin_file_nm(), StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20");
 
-        log.info("encodedFileName : {}",encodedFileName);
-        log.info(("orginal : {}"),fileData.getOrigin_file_nm());
+        log.info("encodedFileName : {}", encodedFileName);
+        log.info(("orginal : {}"), fileData.getOrigin_file_nm());
 
         //파일 응답 반환
         return ResponseEntity.ok()
@@ -80,18 +78,35 @@ public class FileController {
     //파일 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<Map<String, Object>> deleteFile(@RequestParam("save_path") String save_path,
-                                                          @RequestParam("file_no") int file_no){
+                                                          @RequestParam("file_no") int file_no) {
         Map<String, Object> response = new HashMap<>();
 
         try {
             //파일 삭제
-            fileService.deleteFile(save_path,file_no);
+            fileService.deleteFile(save_path, file_no);
 
-            response.put("success",true);
+            response.put("success", true);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            response.put("success",false);
+            response.put("success", false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    //에디터 이미지 업로드
+    @PostMapping("/imgUpload")
+    public String imgUpload(@RequestPart("image") MultipartFile imgFile) {
+        if (imgFile.isEmpty()) {
+            return "파일이 없습니다.";
+        }
+
+        try {
+            //파일 업로드 + 저장 경로 알아내기
+            String imgUrl = fileService.editorImgUpload(imgFile);
+
+            return imgUrl;
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
 }

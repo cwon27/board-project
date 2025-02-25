@@ -53,14 +53,14 @@ export const getBoardDetail = async (board_no: number) => {
   try {
     const response = await apiUrl.get(`/board/listDetail/${board_no}`);
     if (!response.data) {
-      throw new Error('데이터가 존재하지 않습니다')
+      throw new Error("데이터가 존재하지 않습니다");
     }
 
     return response.data;
   } catch (e: any) {
     if (e.response) {
-      alert(`에러: ${e.response.data}`); 
-      location.href="/list";
+      alert(`에러: ${e.response.data}`);
+      location.href = "/list";
     } else {
       alert("알 수 없는 오류 발생");
     }
@@ -211,4 +211,24 @@ export const deleteFile = async (save_path: string, file_no: number) => {
   });
 
   return response.data;
+};
+
+//Editor 이미지 업로드
+export const editorUploadImg = async (blob: File) => {
+  const formData = new FormData();
+  formData.append("image", blob);
+
+  try {
+    const response = await apiUrl.post("/file/imgUpload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log(response.data);
+    return response.data;
+  } catch (e) {
+    alert("이미지 업로드 중 오류가 발생했습니다.");
+    console.error("이미지 업로드 에러", e);
+  }
 };
