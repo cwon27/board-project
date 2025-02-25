@@ -34,10 +34,14 @@ export const FileInput = ({
 
       setFiles(newFiles);
 
-      const filteredFile = newFiles.filter(
-        (filterItem) => filterItem.file !== null
-      );
+      //ord문제때문에 null이면 빈값으로 넣어줘야함
+      const filteredFile = newFiles.map((item) => ({
+        ...item,
+        file: item.file === null ? new File([], "") : item.file
+      }));
+
       onChange(filteredFile);
+      console.log(filteredFile);
     }
   }, [existingFiles]);
 
@@ -59,10 +63,13 @@ export const FileInput = ({
       setFiles(newFiles);
       console.log(newFiles);
 
-      //file이 null값인 애들은 보내면 안됨
-      const filteredFile = newFiles.filter(
-        (filterItem) => filterItem.file !== null
-      );
+      //ord문제때문에 null이면 빈값으로 넣어줘야함
+      const filteredFile = newFiles.map((item) => ({
+        ...item,
+        file: item.file === null ? new File([], "") : item.file
+      }));
+
+      console.log(filteredFile);
       onChange(filteredFile);
     }
   };
@@ -91,6 +98,7 @@ export const FileInput = ({
           onSuccess: () => {
             alert("파일이 삭제되었습니다.");
             updateFileList(i); // 삭제 후 리스트 업데이트
+            window.location.reload();
           },
           onError: () => {
             alert("파일 삭제에 실패했습니다.");
