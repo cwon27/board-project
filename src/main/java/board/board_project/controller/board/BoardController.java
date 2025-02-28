@@ -109,8 +109,6 @@ public class BoardController {
     public ResponseEntity<Map<String, Object>> deleteBoard(@PathVariable("boardNo") int boardNo) {
         Map<String, Object> response = new HashMap<>();
 
-        log.info("*************boardNO : {}",boardNo);//잘 옴
-
         try {
             boardService.deleteBoard(boardNo);
 

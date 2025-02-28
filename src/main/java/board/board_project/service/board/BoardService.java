@@ -126,20 +126,19 @@ public class BoardService {
     //글 삭제
     @Transactional
     public void deleteBoard(int board_no) {
-        log.info("삭제 요청: board_no = {}", board_no);
-
         try {
+            //파일 삭제 -> 먼저 하는 이유는 글 삭제부터 하면 해당 board_no가 사라지기 때문!!!!
+            log.info("파일 삭제 진행: board_no = {}", board_no);
+            fileService.deleteFileAll(board_no);
+
             //글 삭제
             int result = boardMapper.deleteBoard(board_no);
 
             if (result <= 0) {
                 log.error("게시물 삭제 실패: board_no = {}", board_no);
                 throw new RuntimeException("게시물 삭제 실패");
-            } else {
-                //파일 삭제
-                log.info("파일 삭제 진행: board_no = {}", board_no);
-                fileService.deleteFileAll(board_no);
             }
+
         } catch (Exception e) {
             log.error("파일 삭제 중 오류 발생: board_no = {}, error = {}", board_no, e.getMessage());
             throw new RuntimeException("파일 삭제 실패", e);

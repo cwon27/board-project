@@ -82,6 +82,7 @@ public class FileService {
 
     //파일 데이터 GET
     public List<FileDataDTO> getFileData(int board_no){
+        log.info("service board_no : {}",board_no);
         return fileMapper.getFileData(board_no);
     }
 
@@ -97,11 +98,11 @@ public class FileService {
 
     //파일 삭제(모두 -> 삭제버튼 누른 경우)
     public void deleteFileAll(int board_no){
-        log.info("파일 삭제 요청: board_no = {}", board_no);//잘 오는데...
+        log.info("파일 삭제 요청: board_no = {}", board_no);
 
         List<FileDataDTO> files = getFileData(board_no);
 
-        log.info(files.toString());
+        log.info("파일 : {}",files.toString());
 
         if(files==null || files.isEmpty()){
             log.warn("삭제할 파일이 없음: board_no = {}", board_no);
